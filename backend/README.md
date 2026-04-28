@@ -2,7 +2,7 @@
 
 > *The bridge between disruption and decision.*
 
-Gemini-powered supply chain disruption classification API for [PathSetu](https://github.com/arshpreeetahuja/pathsetu) — the Google Solution Challenge 2026 submission by Team PathSetu, B.Tech., Second Year,  IGDTUW-Delhi.
+Gemini-powered supply chain disruption classification API for [PathSetu](https://github.com/arshpreeetahuja/pathsetu) — the Google Solution Challenge 2026 submission by Team PathSetu, B.Tech., First Year,  IGDTUW-Delhi.
 
 This backend takes Indian supply chain news headlines and uses **Google Gemini** to classify them into structured disruption signals (weather, traffic, port, supplier, demand) with severity, affected corridors, and recommended actions.
 
