@@ -1,0 +1,68 @@
+# ============================================================
+# CRITICAL: Protects secrets from being pushed to GitHub
+# ============================================================
+
+# Environment variables (NEVER commit these)
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Render / deployment artifacts
+.render/
+
+# Node / frontend tooling (if used later)
+node_modules/
+.next/
+.nuxt/
+.cache/
+
+# OS-specific
+.DS_Store
+Thumbs.db

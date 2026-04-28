@@ -1,0 +1,4144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PathSetu — The bridge between disruption and decision</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f5;
+  --bg-tertiary: #f0efe9;
+  --bg-danger: #fcebeb;
+  --bg-warning: #faeeda;
+  --bg-success: #eaf3de;
+  --bg-info: #e6f1fb;
+
+  --text-primary: #1a1a18;
+  --text-secondary: #5f5e5a;
+  --text-tertiary: #88877f;
+  --text-danger: #a32d2d;
+  --text-warning: #633806;
+  --text-success: #27500a;
+  --text-info: #0c447c;
+
+  --border-default: rgba(0,0,0,0.12);
+  --border-emphasis: rgba(0,0,0,0.24);
+  --border-danger: rgba(162,45,45,0.35);
+  --border-warning: rgba(99,56,6,0.35);
+  --border-success: rgba(39,80,10,0.35);
+  --border-info: rgba(12,68,124,0.35);
+
+  --red: #e24b4a;
+  --amber: #ef9f27;
+  --green: #1d9e75;
+  --blue: #378add;
+  --gray: #888780;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --hover-lift: 0 1px 3px rgba(0,0,0,0.04), 0 2px 6px rgba(0,0,0,0.03);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1e1e1c;
+    --bg-secondary: #252523;
+    --bg-tertiary: #161614;
+    --bg-danger: #2a1515;
+    --bg-warning: #261c08;
+    --bg-success: #111f06;
+    --bg-info: #071828;
+    --text-primary: #f0efe9;
+    --text-secondary: #b4b2a9;
+    --text-tertiary: #888780;
+    --text-danger: #e88080;
+    --text-warning: #e0b870;
+    --text-success: #a8d080;
+    --text-info: #90c0f0;
+    --border-default: rgba(255,255,255,0.1);
+    --border-emphasis: rgba(255,255,255,0.2);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.app-wrapper {
+  min-height: 100vh;
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Top Bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--border-default);
+  margin-bottom: 1rem;
+}
+
+.logo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.topbar-spacer { flex: 1; }
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-success);
+  color: var(--text-success);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: livePulse 2s ease infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.clock {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+/* Nav Tabs */
+.nav-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.nav-tab {
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.nav-tab:hover { background: var(--bg-secondary); transform: translateY(-1px); }
+.nav-tab:active { transform: scale(0.97); }
+
+.nav-tab.active {
+  background: var(--bg-info);
+  color: var(--text-info);
+  border-color: var(--border-info);
+}
+
+/* Buttons */
+button {
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, opacity 0.2s, transform 0.1s;
+}
+
+button:hover { background: var(--bg-secondary); }
+button:active { transform: scale(0.97); }
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(55,138,221,0.2);
+}
+button:disabled { cursor: default; }
+button:disabled:hover { background: inherit; }
+
+.btn-primary {
+  background: var(--bg-info);
+  color: var(--text-info);
+  border-color: var(--border-info);
+}
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-danger {
+  background: var(--bg-danger);
+  color: var(--text-danger);
+  border-color: var(--border-danger);
+}
+
+.btn-done {
+  background: var(--bg-success);
+  color: var(--text-success);
+  border-color: var(--border-success);
+}
+
+/* Cards */
+.card {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--hover-lift);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.card-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.card-footnote {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 0.5px solid var(--border-default);
+  font-style: italic;
+}
+
+/* Metric cards */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.metric-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  animation: fadeUp 0.3s ease both;
+  transition: transform 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+}
+
+.metric-card:nth-child(1) { animation-delay: 0.05s; }
+.metric-card:nth-child(2) { animation-delay: 0.1s; }
+.metric-card:nth-child(3) { animation-delay: 0.15s; }
+.metric-card:nth-child(4) { animation-delay: 0.2s; }
+.metric-card:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.metric-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.metric-sub {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.metric-sub.danger { color: var(--text-danger); }
+.metric-sub.warning { color: var(--text-warning); }
+.metric-sub.success { color: var(--text-success); }
+.metric-sub.neutral { color: var(--text-secondary); }
+
+/* Two-column */
+.two-col {
+  display: grid;
+  grid-template-columns: 58% calc(42% - 12px);
+  gap: 12px;
+  align-items: start;
+}
+
+/* Alerts */
+.alert-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 0.5px solid;
+  margin-bottom: 10px;
+  transition: opacity 0.3s;
+}
+
+.alert-item:last-child { margin-bottom: 0; }
+.alert-item.danger { background: var(--bg-danger); border-color: var(--border-danger); }
+.alert-item.warning { background: var(--bg-warning); border-color: var(--border-warning); }
+.alert-item.info { background: var(--bg-info); border-color: var(--border-info); }
+
+.alert-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.alert-icon.danger { background: var(--red); }
+.alert-icon.warning { background: var(--amber); }
+.alert-icon.info { background: var(--blue); }
+
+.alert-body { flex: 1; min-width: 0; }
+
+.alert-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.alert-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.alert-time {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Route Map */
+.route-map-container {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 10px;
+}
+
+.route-map-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.route-legend {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.legend-line-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-line {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* Risk Predictor */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.slider-label {
+  min-width: 90px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.slider-row input[type=range] {
+  flex: 1;
+  accent-color: var(--blue);
+}
+
+.slider-value {
+  min-width: 40px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.predictor-result {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  margin-top: 12px;
+}
+
+.result-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.result-value {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.result-value.green { color: var(--text-success); }
+.result-value.amber { color: var(--text-warning); }
+.result-value.red { color: var(--text-danger); }
+
+.result-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.card + .card-stack { margin-top: 12px; }
+
+/* Filters */
+.filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+select {
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+select:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(55,138,221,0.2);
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 0.5px solid var(--border-default);
+  white-space: nowrap;
+}
+
+td {
+  font-size: 12px;
+  padding: 10px 8px;
+  border-bottom: 0.5px solid var(--border-default);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.15s; cursor: pointer; }
+tbody tr:hover { background: var(--bg-secondary); }
+tbody tr.expanded { background: var(--bg-secondary); }
+
+.mono {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.status-dot.on-track { background: var(--green); }
+.status-dot.at-risk { background: var(--amber); }
+.status-dot.delayed { background: var(--red); }
+.status-dot.rerouted { background: var(--blue); }
+
+/* Pills */
+.pill {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pill.danger { background: var(--bg-danger); color: var(--text-danger); }
+.pill.warning { background: var(--bg-warning); color: var(--text-warning); }
+.pill.success { background: var(--bg-success); color: var(--text-success); }
+.pill.info { background: var(--bg-info); color: var(--text-info); }
+
+/* DPS display */
+.dps-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dps-score {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 24px;
+}
+
+.dps-score.low { color: var(--text-success); }
+.dps-score.med { color: var(--text-warning); }
+.dps-score.high { color: var(--text-danger); }
+
+.dps-bar {
+  width: 48px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-tertiary);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.dps-bar-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.dps-bar-fill.low { background: var(--green); }
+.dps-bar-fill.med { background: var(--amber); }
+.dps-bar-fill.high { background: var(--red); }
+
+/* DPS expanded panel */
+.dps-panel {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin: 4px 0 8px 0;
+  font-size: 12px;
+  animation: fadeIn 0.2s ease;
+}
+
+.dps-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid var(--border-default);
+  flex-wrap: wrap;
+}
+
+.dps-gauge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dps-gauge-score {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dps-gauge-score.low { color: var(--text-success); }
+.dps-gauge-score.med { color: var(--text-warning); }
+.dps-gauge-score.high { color: var(--text-danger); }
+
+.dps-gauge-label {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dps-confidence {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.confidence-bar-container {
+  width: 100px;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.confidence-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  transition: width 0.3s ease;
+}
+
+.dps-reasoning {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.dps-factors {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dps-factor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.dps-factor-name {
+  color: var(--text-secondary);
+}
+
+.dps-factor-points {
+  font-weight: 500;
+  font-family: 'Courier New', monospace;
+  color: var(--text-primary);
+}
+
+/* Fleet DPS card (Overview) */
+.fleet-dps {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.fleet-dps-score {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.fleet-dps-confidence {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Suppliers */
+.supplier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.supplier-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  transition: transform 0.15s;
+}
+
+.supplier-card:hover { transform: translateY(-1px); }
+
+.supplier-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.supplier-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.supplier-loc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.risk-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.risk-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.risk-bar-fill.low { background: var(--green); }
+.risk-bar-fill.med { background: var(--amber); }
+.risk-bar-fill.high { background: var(--red); }
+
+/* BLE / Mobile Sensing section */
+.ble-section {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.ble-concept-note {
+  background: var(--bg-info);
+  color: var(--text-info);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-size: 11px;
+  margin-bottom: 14px;
+  border: 0.5px solid var(--border-info);
+}
+
+.ble-usecases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ble-usecase {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  border: 0.5px solid var(--border-default);
+  transition: transform 0.15s ease;
+}
+
+.ble-usecase:hover { transform: translateY(-2px); }
+
+.ble-usecase-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bg-info);
+  color: var(--text-info);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.ble-usecase-title {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.ble-usecase-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.ble-usecase-cost {
+  font-size: 11px;
+  color: var(--text-info);
+  font-weight: 500;
+}
+
+.ble-coverage {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+
+.ble-coverage-title {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.coverage-bar {
+  display: flex;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  background: var(--bg-tertiary);
+}
+
+.coverage-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #fff;
+  font-weight: 500;
+  transition: width 0.3s ease;
+}
+
+.coverage-segment.connected { background: var(--green); }
+.coverage-segment.pending { background: var(--amber); }
+.coverage-segment.offline { background: var(--gray); }
+
+.coverage-legend {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+/* Hidden suppliers — framing panel */
+.framing-panel {
+  background: linear-gradient(135deg, var(--bg-info) 0%, var(--bg-secondary) 100%);
+  border: 0.5px solid var(--border-info);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Compact variant for secondary tabs */
+.framing-panel.compact {
+  padding: 0.875rem 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.framing-panel.compact .framing-headline {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.framing-panel.compact .framing-body {
+  font-size: 12px;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+.framing-eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-info);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.framing-headline {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.framing-body {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.framing-body strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.framing-citations {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Phone mockup + sensor table */
+.phone-section {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.phone-section-header {
+  margin-bottom: 14px;
+}
+
+.phone-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.phone-mockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.phone-mockup-caption {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.phone-mockup svg {
+  width: 200px;
+  height: auto;
+  display: block;
+}
+
+.sensor-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sensor-table th {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 0.5px solid var(--border-default);
+}
+
+.sensor-table td {
+  font-size: 12px;
+  padding: 10px;
+  border-bottom: 0.5px solid var(--border-default);
+  vertical-align: middle;
+}
+
+.sensor-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sensor-table tbody tr {
+  cursor: default;
+}
+
+.sensor-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.sensor-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.sensor-signal {
+  color: var(--text-secondary);
+}
+
+.sensor-feeds {
+  font-size: 11px;
+}
+
+.sensor-feeds-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.sensor-feeds-pill.operational { background: var(--bg-info); color: var(--text-info); }
+.sensor-feeds-pill.compliance { background: var(--bg-success); color: var(--text-success); }
+.sensor-feeds-pill.financial { background: var(--bg-warning); color: var(--text-warning); }
+
+/* Zero-literacy UI section */
+.zero-lit-section {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.zero-lit-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.zero-lit-phone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.zero-lit-phone svg {
+  width: 200px;
+  height: auto;
+  display: block;
+}
+
+.zero-lit-phone-caption {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.gesture-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gesture-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border-default);
+}
+
+.gesture-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.gesture-icon.blue { background: var(--blue); }
+.gesture-icon.amber { background: var(--amber); }
+.gesture-icon.gray { background: var(--gray); }
+
+.gesture-body { flex: 1; min-width: 0; }
+
+.gesture-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.gesture-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.gesture-desc strong {
+  color: var(--text-info);
+  font-weight: 500;
+}
+
+/* Phone coverage per T1 supplier */
+.coverage-list-section {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.coverage-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.coverage-row {
+  display: grid;
+  grid-template-columns: 140px 50px 1fr 70px;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.coverage-supplier {
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.coverage-ratio {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'Courier New', monospace;
+}
+
+.coverage-line {
+  height: 10px;
+  background: var(--bg-tertiary);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.coverage-line-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.5s ease;
+}
+
+.coverage-line-fill.good { background: var(--green); }
+.coverage-line-fill.partial { background: var(--amber); }
+.coverage-line-fill.hidden { background: var(--red); }
+
+.coverage-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.coverage-tag.good { background: var(--bg-success); color: var(--text-success); }
+.coverage-tag.partial { background: var(--bg-warning); color: var(--text-warning); }
+.coverage-tag.hidden { background: var(--bg-danger); color: var(--text-danger); }
+
+.coverage-insight {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: var(--bg-info);
+  border: 0.5px solid var(--border-info);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  color: var(--text-info);
+  line-height: 1.55;
+}
+
+.coverage-insight strong {
+  font-weight: 600;
+}
+
+/* Vaccine cold chain spotlight */
+.spotlight-panel {
+  background: linear-gradient(135deg, #fcf3ed 0%, var(--bg-primary) 100%);
+  border: 0.5px solid var(--border-warning);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .spotlight-panel {
+    background: linear-gradient(135deg, #1e1a0e 0%, var(--bg-primary) 100%);
+  }
+}
+
+.spotlight-eyebrow {
+  display: inline-block;
+  background: var(--amber);
+  color: #fff;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.spotlight-headline {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.spotlight-body {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.spotlight-body strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.spotlight-sdg-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.sdg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--text-primary);
+}
+
+.sdg-chip strong {
+  font-weight: 600;
+  color: var(--text-info);
+}
+
+.spotlight-workflow {
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border-default);
+}
+
+.spotlight-workflow-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.workflow-steps {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+
+.workflow-step {
+  padding: 4px 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+.workflow-arrow {
+  color: var(--text-tertiary);
+  font-size: 10px;
+}
+
+/* Divider for Tier 1 (below) section */
+.tier1-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.tier1-divider-line {
+  flex: 1;
+  height: 0.5px;
+  background: var(--border-default);
+}
+
+.tier1-divider-text {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+/* Reroute panel */
+.reroute-panel {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: var(--radius-lg);
+  margin-top: 12px;
+  padding: 14px;
+  animation: fadeIn 0.25s ease;
+}
+
+.reroute-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reroute-panel-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.reroute-panel-subtitle {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.reroute-close {
+  padding: 3px 10px;
+  font-size: 11px;
+}
+
+.reroute-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.reroute-option {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  position: relative;
+  transition: transform 0.15s, border-color 0.2s;
+  cursor: pointer;
+}
+
+.reroute-option:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-emphasis);
+}
+
+.reroute-option.recommended {
+  border-color: var(--border-info);
+  border-width: 1.5px;
+  background: linear-gradient(135deg, var(--bg-info) 0%, var(--bg-primary) 100%);
+}
+
+.reroute-option.blocked {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.reroute-option.blocked:hover { transform: none; }
+
+.recommended-badge {
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.reroute-option-eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.reroute-option-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.reroute-option-route {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.reroute-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  padding: 5px 0;
+  border-bottom: 0.5px dashed var(--border-default);
+}
+
+.reroute-metric:last-of-type { border-bottom: none; }
+
+.reroute-metric-label {
+  color: var(--text-tertiary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reroute-metric-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.reroute-metric-value.good { color: var(--text-success); }
+.reroute-metric-value.bad { color: var(--text-danger); }
+
+.reroute-metric-delta {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  margin-left: 3px;
+}
+
+.reroute-metric-delta.up { color: var(--text-danger); }
+.reroute-metric-delta.down { color: var(--text-success); }
+
+.reroute-blocked-stamp {
+  display: inline-block;
+  background: var(--bg-danger);
+  color: var(--text-danger);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reroute-option-action {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border-default);
+}
+
+.reroute-option-action button {
+  width: 100%;
+  padding: 6px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Auto-reroute toggle section */
+.auto-reroute-box {
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.auto-reroute-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.auto-reroute-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.auto-reroute-sublabel {
+  font-size: 10px;
+  color: var(--text-tertiary);
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: var(--border-emphasis);
+  border-radius: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  border: none;
+  padding: 0;
+}
+
+.toggle-switch.on {
+  background: var(--green);
+}
+
+.toggle-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.toggle-switch.on .toggle-switch-knob {
+  transform: translateX(18px);
+}
+
+.priority-selector {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.priority-option {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-family: inherit;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: center;
+}
+
+.priority-option.active {
+  background: var(--bg-info);
+  color: var(--text-info);
+  border-color: var(--border-info);
+  font-weight: 500;
+}
+
+.priority-option:hover:not(.active) {
+  background: var(--bg-secondary);
+}
+
+.auto-reroute-status {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px dashed var(--border-default);
+}
+
+.auto-reroute-status strong { color: var(--text-primary); }
+
+/* Charts */
+.chart-wrapper {
+  height: 220px;
+  position: relative;
+}
+
+.chart-wrapper.short { height: 200px; }
+.chart-wrapper.tall { height: 260px; }
+
+.chart-legend {
+  display: flex;
+  gap: 14px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Coordination */
+.incident-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.incident-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.incident-meta {
+  font-size: 12px;
+  color: var(--text-danger);
+  font-weight: 500;
+}
+
+.team-pills {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.team-pill {
+  cursor: pointer;
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.team-pill.active {
+  background: var(--bg-info);
+  color: var(--text-info);
+  border-color: var(--border-info);
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-bottom: 0.5px solid var(--border-default);
+}
+
+.task-item:last-child { border-bottom: none; }
+
+.task-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: 3px;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: transparent;
+  font-family: inherit;
+  padding: 0;
+}
+
+.task-checkbox.done {
+  background: var(--bg-success);
+  border-color: var(--border-success);
+  color: var(--text-success);
+}
+
+.task-text { flex: 1; font-size: 12px; color: var(--text-primary); }
+.task-text.done {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+}
+
+.task-team {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.task-urgency { white-space: nowrap; }
+
+/* AI Summary */
+.ai-summary-section {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 0.5px solid var(--border-default);
+}
+
+.ai-summary-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.ai-summary-box {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.template-button-wrapper { margin-top: 12px; }
+
+/* Trends */
+.trends-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+/* Impact & ROI Tab */
+.roi-intro {
+  background: var(--bg-info);
+  color: var(--text-info);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  font-size: 13px;
+  border: 0.5px solid var(--border-info);
+}
+
+.roi-intro-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.usecase-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.usecase-tab {
+  padding: 10px 16px;
+  border: 0.5px solid var(--border-emphasis);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--text-primary);
+  transition: transform 0.1s;
+}
+
+.usecase-tab:hover { transform: translateY(-1px); background: var(--bg-secondary); }
+
+.usecase-tab.active {
+  background: var(--bg-info);
+  color: var(--text-info);
+  border-color: var(--border-info);
+  font-weight: 500;
+}
+
+.roi-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.roi-inputs, .roi-outputs {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+}
+
+.roi-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.roi-input-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.roi-input-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.roi-input-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.roi-output-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 0.5px dashed var(--border-default);
+}
+
+.roi-output-row:last-child { border-bottom: none; }
+
+.roi-output-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.roi-output-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.roi-output-value.big {
+  font-size: 22px;
+  color: var(--text-success);
+}
+
+.roi-highlight-row {
+  background: var(--bg-success);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roi-highlight-label {
+  font-size: 12px;
+  color: var(--text-success);
+  font-weight: 500;
+}
+
+.roi-highlight-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-success);
+}
+
+/* CSR Compliance box */
+.csr-box {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  border: 0.5px solid var(--border-default);
+}
+
+.csr-box-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.csr-box-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.csr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.csr-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.csr-check {
+  color: var(--text-success);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.csr-item-text { line-height: 1.5; }
+
+/* Footer */
+.app-footer {
+  margin-top: 1.5rem;
+  padding: 14px;
+  border-top: 0.5px solid var(--border-default);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  text-align: center;
+  line-height: 1.7;
+}
+
+.app-footer strong {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Tab content */
+.tab-content {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content.hidden { display: none; }
+
+.overview-content > div { margin-bottom: 1rem; }
+.overview-content > div:last-child { margin-bottom: 0; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .metrics-row { grid-template-columns: repeat(3, 1fr); }
+  .ble-usecases { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; }
+  .trends-row { grid-template-columns: 1fr; }
+  .roi-layout { grid-template-columns: 1fr; }
+  .supplier-grid { grid-template-columns: 1fr; }
+  .ble-usecases { grid-template-columns: 1fr; }
+  .phone-layout { grid-template-columns: 1fr; }
+  .zero-lit-layout { grid-template-columns: 1fr; }
+  .coverage-row { grid-template-columns: 120px 50px 1fr 70px; }
+  .reroute-options { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 500px) {
+  .metrics-row { grid-template-columns: 1fr; }
+  .alert-item { flex-wrap: wrap; }
+  .alert-time { width: 100%; text-align: right; }
+  .coverage-row { grid-template-columns: 1fr; gap: 4px; padding: 8px 0; border-bottom: 0.5px solid var(--border-default); }
+}
+
+/* ============================================ */
+/* GEMINI LIVE CLASSIFICATION PANEL              */
+/* ============================================ */
+.gemini-panel {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-top: 20px;
+  position: relative;
+}
+.gemini-panel.has-result { border-color: var(--blue); }
+.gemini-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.gemini-title-block { flex: 1; }
+.gemini-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gemini-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-info);
+  color: var(--text-info);
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.gemini-subtitle {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.gemini-powered {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+.gemini-powered .g-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4285F4, #EA4335 50%, #FBBC04 75%, #34A853);
+}
+.gemini-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.gemini-select {
+  padding: 9px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.gemini-select:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+.gemini-btn {
+  background: var(--text-primary);
+  color: #fff;
+  border: 0;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 120ms ease;
+}
+.gemini-btn:hover:not(:disabled) { background: #000; }
+.gemini-btn:disabled { opacity: 0.55; cursor: wait; }
+.gemini-status {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+  font-style: italic;
+}
+.gemini-status.error { color: var(--text-danger); font-style: normal; font-weight: 500; }
+.gemini-status.success { color: var(--text-success); font-style: normal; font-weight: 500; }
+
+.gemini-result {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-top: 12px;
+}
+.gemini-result-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.gemini-result-eyebrow {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+.gemini-result-headline {
+  font-size: 12.5px;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  font-style: italic;
+}
+.gemini-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.gemini-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.gemini-tag-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+.gemini-tag.signal-weather { background: var(--bg-info); color: var(--text-info); }
+.gemini-tag.signal-traffic { background: var(--bg-warning); color: var(--text-warning); }
+.gemini-tag.signal-port { background: var(--bg-info); color: var(--text-info); }
+.gemini-tag.signal-supplier { background: var(--bg-success); color: var(--text-success); }
+.gemini-tag.signal-demand { background: var(--bg-secondary); color: var(--text-secondary); }
+.gemini-tag.signal-other { background: var(--bg-tertiary); color: var(--text-tertiary); }
+.gemini-tag.severity-critical { background: var(--bg-danger); color: var(--text-danger); font-weight: 600; }
+.gemini-tag.severity-high { background: var(--bg-danger); color: var(--text-danger); }
+.gemini-tag.severity-medium { background: var(--bg-warning); color: var(--text-warning); }
+.gemini-tag.severity-low { background: var(--bg-success); color: var(--text-success); }
+
+.gemini-fields { display: grid; gap: 8px; }
+.gemini-field {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 12px;
+  font-size: 12px;
+  align-items: start;
+}
+.gemini-field-label {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  padding-top: 1px;
+}
+.gemini-field-value {
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.gemini-field-value.action {
+  font-weight: 500;
+}
+.gemini-confidence-bar {
+  width: 80px;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.gemini-confidence-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 3px;
+  transition: width 400ms ease;
+}
+.gemini-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: gemini-spin 0.7s linear infinite;
+}
+@keyframes gemini-spin {
+  to { transform: rotate(360deg); }
+}
+@media (max-width: 700px) {
+  .gemini-controls { grid-template-columns: 1fr; }
+  .gemini-field { grid-template-columns: 1fr; gap: 2px; }
+  .gemini-field-label { padding-top: 0; }
+}
+
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="logo-dot"></div>
+    <div>
+      <div class="brand-title">PathSetu</div>
+      <div class="brand-subtitle">The bridge between disruption and decision</div>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="live-badge">
+      <span class="live-dot"></span>
+      <span>Live</span>
+    </div>
+    <div class="clock" id="clock-display">Updated 0s ago</div>
+  </header>
+
+  <!-- NAV TABS -->
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" onclick="switchTab('overview', this)">Overview</button>
+    <button class="nav-tab" onclick="switchTab('shipments', this)">Shipments</button>
+    <button class="nav-tab" onclick="switchTab('supplier', this)">Hidden suppliers</button>
+    <button class="nav-tab" onclick="switchTab('coordination', this)">Coordination</button>
+    <button class="nav-tab" onclick="switchTab('trends', this)">Trends</button>
+    <button class="nav-tab" onclick="switchTab('roi', this)">Impact & ROI</button>
+  </nav>
+
+  <main role="main">
+
+    <!-- ============================================ -->
+    <!-- TAB 1 — OVERVIEW                             -->
+    <!-- ============================================ -->
+    <div id="tab-overview" class="tab-content overview-content">
+
+      <div class="framing-panel compact">
+        <div class="framing-eyebrow">What you see here</div>
+        <div class="framing-headline">Your entire supply chain, one glance — the questions a dispatcher asks first.</div>
+        <div class="framing-body">
+          <strong>What's at risk right now? What needs action in the next 4 hours?</strong> Disruption alerts are AI-predicted using signal fusion across weather, traffic, port congestion, supplier health, and Tier 2/3 phone-sourced events. Fleet DPS score shows aggregate risk. The predictor (right) lets you simulate "what if severity doubles?" in real time.
+        </div>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-label">Active shipments</div>
+          <div class="metric-value">1,284</div>
+          <div class="metric-sub neutral">Across 6 routes</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">At-risk shipments</div>
+          <div class="metric-value" id="at-risk-count">47</div>
+          <div class="metric-sub danger">Predicted in next 4 hrs</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Active disruptions</div>
+          <div class="metric-value">3</div>
+          <div class="metric-sub warning">2 weather · 1 traffic</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Fleet DPS score</div>
+          <div class="fleet-dps">
+            <span class="fleet-dps-score" id="fleet-dps-value" style="color: var(--text-warning);">54</span>
+            <span class="fleet-dps-confidence" id="fleet-dps-conf">conf. 78%</span>
+          </div>
+          <div class="metric-sub warning">Moderate — action recommended</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">On-time delivery rate</div>
+          <div class="metric-value">87%</div>
+          <div class="metric-sub success">↑ 4% vs last week</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Live disruption alerts</div>
+          <div class="card-subtitle">AI-predicted · sorted by impact</div>
+
+          <div class="alert-item danger" id="alert-1">
+            <div class="alert-icon danger">!</div>
+            <div class="alert-body">
+              <div class="alert-title">NH44 waterlogging — Assam corridor</div>
+              <div class="alert-desc">38 trucks at high risk. Heavy rain forecast 3h. Alternate via NH37 adds 52 min but clear.</div>
+              <div class="alert-actions">
+                <button class="btn-primary" onclick="toggleReroutePanel()">View route options ↗</button>
+                <button onclick="handleActionClick(this,'notify_customers')">Alert customers ↗</button>
+                <button onclick="handleActionClick(this,'dismiss')">Dismiss</button>
+              </div>
+
+              <div id="reroute-panel" class="reroute-panel" style="display: none;">
+                <div class="reroute-panel-header">
+                  <div>
+                    <div class="reroute-panel-title">Route options — NH44 waterlogging, 38 trucks</div>
+                    <div class="reroute-panel-subtitle">AI-recommended route highlighted · carbon math based on 16-ton truck, 0.685 kg CO₂/km (NITI Aayog HCV factor)</div>
+                  </div>
+                  <button class="reroute-close" onclick="toggleReroutePanel()">Close</button>
+                </div>
+
+                <div class="reroute-options">
+                  <!-- Option: Original (blocked) -->
+                  <div class="reroute-option blocked">
+                    <div class="reroute-option-eyebrow">Original</div>
+                    <div class="reroute-option-title">NH44 direct</div>
+                    <div class="reroute-option-route">Guwahati → Siliguri → Delhi</div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">⏱ Time</span>
+                      <span class="reroute-metric-value">4h 20m</span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">📏 Distance</span>
+                      <span class="reroute-metric-value">412 km</span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">₹ Cost</span>
+                      <span class="reroute-metric-value">₹ 48,000</span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">🌱 Carbon</span>
+                      <span class="reroute-metric-value">282 kg</span>
+                    </div>
+                    <div class="reroute-blocked-stamp">✕ Blocked</div>
+                  </div>
+
+                  <!-- Option A: Fastest -->
+                  <div class="reroute-option recommended">
+                    <div class="recommended-badge">AI pick</div>
+                    <div class="reroute-option-eyebrow">Option A</div>
+                    <div class="reroute-option-title">Fastest — NH37</div>
+                    <div class="reroute-option-route">Via Tezpur → Siliguri → Delhi</div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">⏱ Time</span>
+                      <span class="reroute-metric-value">5h 12m <span class="reroute-metric-delta up">+52m</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">📏 Distance</span>
+                      <span class="reroute-metric-value">478 km <span class="reroute-metric-delta up">+66 km</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">₹ Cost</span>
+                      <span class="reroute-metric-value">₹ 56,600 <span class="reroute-metric-delta up">+₹ 8,600</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">🌱 Carbon</span>
+                      <span class="reroute-metric-value">327 kg <span class="reroute-metric-delta up">+45 kg</span></span>
+                    </div>
+                    <div class="reroute-option-action">
+                      <button class="btn-primary" onclick="handleActionClick(this,'reroute_fastest')">Re-route 38 trucks</button>
+                    </div>
+                  </div>
+
+                  <!-- Option B: Cheapest -->
+                  <div class="reroute-option">
+                    <div class="reroute-option-eyebrow">Option B</div>
+                    <div class="reroute-option-title">Cheapest — SH42</div>
+                    <div class="reroute-option-route">Via Dhubri → Malda → Delhi</div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">⏱ Time</span>
+                      <span class="reroute-metric-value">6h 45m <span class="reroute-metric-delta up">+2h 25m</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">📏 Distance</span>
+                      <span class="reroute-metric-value">485 km <span class="reroute-metric-delta up">+73 km</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">₹ Cost</span>
+                      <span class="reroute-metric-value good">₹ 51,200 <span class="reroute-metric-delta up">+₹ 3,200</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">🌱 Carbon</span>
+                      <span class="reroute-metric-value">332 kg <span class="reroute-metric-delta up">+50 kg</span></span>
+                    </div>
+                    <div class="reroute-option-action">
+                      <button onclick="handleActionClick(this,'reroute_cheapest')">Re-route 38 trucks</button>
+                    </div>
+                  </div>
+
+                  <!-- Option C: Low-emission -->
+                  <div class="reroute-option">
+                    <div class="reroute-option-eyebrow">Option C</div>
+                    <div class="reroute-option-title">Low-emission — multimodal</div>
+                    <div class="reroute-option-route">Truck → rail (NFR) → last-mile truck</div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">⏱ Time</span>
+                      <span class="reroute-metric-value bad">8h 30m <span class="reroute-metric-delta up">+4h 10m</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">📏 Distance</span>
+                      <span class="reroute-metric-value">495 km <span class="reroute-metric-delta up">+83 km</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">₹ Cost</span>
+                      <span class="reroute-metric-value good">₹ 44,200 <span class="reroute-metric-delta down">−₹ 3,800</span></span>
+                    </div>
+                    <div class="reroute-metric">
+                      <span class="reroute-metric-label">🌱 Carbon</span>
+                      <span class="reroute-metric-value good">121 kg <span class="reroute-metric-delta down">−161 kg (−57%)</span></span>
+                    </div>
+                    <div class="reroute-option-action">
+                      <button onclick="handleActionClick(this,'reroute_lowemission')">Re-route 38 trucks</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Auto-reroute toggle -->
+                <div class="auto-reroute-box">
+                  <div class="auto-reroute-header">
+                    <div>
+                      <div class="auto-reroute-title">⚙ Auto-reroute on disruption</div>
+                      <div class="auto-reroute-sublabel">When enabled, PathSetu selects the best option and triggers reroute without manual approval.</div>
+                    </div>
+                    <button id="auto-reroute-toggle" class="toggle-switch" onclick="toggleAutoReroute()" aria-label="Toggle auto-reroute">
+                      <span class="toggle-switch-knob"></span>
+                    </button>
+                  </div>
+
+                  <div class="priority-selector">
+                    <button class="priority-option active" onclick="setReroutePriority('time', this)">⏱ Minimize time</button>
+                    <button class="priority-option" onclick="setReroutePriority('cost', this)">₹ Minimize cost</button>
+                    <button class="priority-option" onclick="setReroutePriority('carbon', this)">🌱 Minimize carbon</button>
+                  </div>
+
+                  <div class="auto-reroute-status" id="auto-reroute-status">
+                    Currently <strong>off</strong>. Priority set to <strong>minimize time</strong>. When enabled, system would auto-select <strong>Option A: Fastest (NH37)</strong> for this disruption.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="alert-time">2 min ago</div>
+          </div>
+
+          <div class="alert-item warning" id="alert-2">
+            <div class="alert-icon warning">~</div>
+            <div class="alert-body">
+              <div class="alert-title">Port congestion — JNPT Mumbai</div>
+              <div class="alert-desc">11 containers delayed 6–10 hrs. 3 downstream warehouses need restocking time adjustment.</div>
+              <div class="alert-actions">
+                <button class="btn-primary" onclick="handleActionClick(this,'notify_warehouses')">Notify warehouses ↗</button>
+                <button onclick="handleActionClick(this,'dismiss')">Dismiss</button>
+              </div>
+            </div>
+            <div class="alert-time">18 min ago</div>
+          </div>
+
+          <div class="alert-item warning" id="alert-3">
+            <div class="alert-icon warning">~</div>
+            <div class="alert-body">
+              <div class="alert-title">Supplier risk spike — Tier 2, Chennai</div>
+              <div class="alert-desc">Rajan Components: financial stress news + delayed shipment history detected.</div>
+              <div class="alert-actions">
+                <button class="btn-primary" onclick="handleActionClick(this,'backup_supplier')">Activate backup supplier ↗</button>
+                <button onclick="handleActionClick(this,'dismiss')">Dismiss</button>
+              </div>
+            </div>
+            <div class="alert-time">41 min ago</div>
+          </div>
+
+          <div class="alert-item info" id="alert-4">
+            <div class="alert-icon info">i</div>
+            <div class="alert-body">
+              <div class="alert-title">Demand spike predicted — Delhi NCR</div>
+              <div class="alert-desc">Festival season signal. Electronics demand likely up 34% in 72h. Restock recommended.</div>
+              <div class="alert-actions">
+                <button class="btn-primary" onclick="handleActionClick(this,'restock')">Trigger restock order ↗</button>
+              </div>
+            </div>
+            <div class="alert-time">1 hr ago</div>
+          </div>
+          <div class="card-footnote">Indian logistics disruption classes mapped to FICCI-Grant Thornton 2026 taxonomy: warehousing, cold chain, last-mile, port.</div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-title">Route risk — live status</div>
+            <div class="card-subtitle">&nbsp;</div>
+            <div class="route-map-container">
+              <svg viewBox="0 0 320 150" role="img" aria-label="Route risk map showing three routes: Mumbai-Delhi clear, Chennai-Hyderabad at risk, Guwahati-Kolkata blocked">
+                <path d="M 40 40 Q 140 20 260 35" fill="none" stroke="#1d9e75" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="40" cy="40" r="4" fill="#1d9e75"/>
+                <circle cx="260" cy="35" r="4" fill="#1d9e75"/>
+                <text x="40" y="28" font-size="9" fill="#5f5e5a">Mumbai–Delhi · Clear</text>
+
+                <path d="M 50 85 Q 160 65 270 80" fill="none" stroke="#ef9f27" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="50" cy="85" r="4" fill="#ef9f27"/>
+                <circle cx="270" cy="80" r="4" fill="#ef9f27"/>
+                <text x="50" y="75" font-size="9" fill="#5f5e5a">Chennai–Hyd · At risk</text>
+
+                <path d="M 60 130 Q 160 115 270 128" fill="none" stroke="#e24b4a" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="60" cy="130" r="4" fill="#e24b4a"/>
+                <circle cx="270" cy="128" r="4" fill="#e24b4a"/>
+                <text x="60" y="120" font-size="9" fill="#5f5e5a">Guwahati–Kol · BLOCKED</text>
+
+                <circle cx="165" cy="122" r="9" fill="#e24b4a" opacity="0.4">
+                  <animate attributeName="r" values="7;13;7" dur="1.5s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.5;0.15;0.5" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="165" cy="122" r="5" fill="#e24b4a">
+                  <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+            </div>
+            <div class="route-legend">
+              <span class="legend-line-item"><span class="legend-line" style="background:#1d9e75"></span>Clear</span>
+              <span class="legend-line-item"><span class="legend-line" style="background:#ef9f27"></span>At risk</span>
+              <span class="legend-line-item"><span class="legend-line" style="background:#e24b4a"></span>Disrupted</span>
+            </div>
+          </div>
+
+          <div class="card card-stack">
+            <div class="card-title">AI risk predictor</div>
+            <div class="card-subtitle">Simulate disruption impact on fleet</div>
+
+            <div class="slider-row">
+              <span class="slider-label">Weather severity</span>
+              <input type="range" min="1" max="10" value="4" id="weather-slider" oninput="updateRisk()">
+              <span class="slider-value" id="weather-value">4</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">Traffic index</span>
+              <input type="range" min="1" max="10" value="3" id="traffic-slider" oninput="updateRisk()">
+              <span class="slider-value" id="traffic-value">3</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">Port load</span>
+              <input type="range" min="1" max="10" value="6" id="port-slider" oninput="updateRisk()">
+              <span class="slider-value" id="port-value">6</span>
+            </div>
+
+            <div class="predictor-result">
+              <div class="result-label">Predicted shipments at risk</div>
+              <div class="result-value" id="predictor-value">0</div>
+              <div class="result-desc" id="predictor-desc">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- LIVE GEMINI CLASSIFICATION PANEL              -->
+      <!-- ============================================ -->
+      <div class="gemini-panel" id="gemini-panel">
+        <div class="gemini-header">
+          <div class="gemini-title-block">
+            <div class="gemini-title">
+              Live Disruption Classification
+              <span class="gemini-live-pill">● Live AI</span>
+            </div>
+            <div class="gemini-subtitle">Pick any Indian supply chain headline. Watch Gemini classify it into a structured signal — type, severity, affected corridors, recommended action — in under 3 seconds.</div>
+          </div>
+          <div class="gemini-powered" title="Powered by Google Gemini">
+            <span class="g-dot"></span>
+            Powered by Google Gemini
+          </div>
+        </div>
+
+        <div class="gemini-controls">
+          <select id="gemini-headline-select" class="gemini-select">
+            <option value="">Loading sample headlines...</option>
+          </select>
+          <button id="gemini-classify-btn" class="gemini-btn" onclick="classifyHeadline()" disabled>
+            <span id="gemini-btn-label">Classify with Gemini →</span>
+          </button>
+        </div>
+        <div class="gemini-status" id="gemini-status">Connect backend to begin live classification.</div>
+
+        <div id="gemini-result-container" style="display: none;"></div>
+      </div>
+
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TAB 2 — SHIPMENTS                            -->
+    <!-- ============================================ -->
+    <div id="tab-shipments" class="tab-content hidden">
+
+      <div class="framing-panel compact">
+        <div class="framing-eyebrow">What you see here</div>
+        <div class="framing-headline">Every shipment, scored. What's at risk and why — before it fails.</div>
+        <div class="framing-body">
+          Every shipment gets a <strong>DPS (Disruption Probability Score)</strong> from 0–100, fusing five signal types: weather, traffic, port congestion, driver hours-of-service, and historical delay patterns. <strong>Click any row to see the breakdown</strong> — contributing factors with points, confidence level, and AI-generated reasoning. No black-box scores; every number is explainable.
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <select id="filter-status" onchange="filterShipments()">
+          <option value="all">All statuses</option>
+          <option value="at-risk">At risk</option>
+          <option value="delayed">Delayed</option>
+          <option value="on-track">On track</option>
+          <option value="rerouted">Rerouted</option>
+        </select>
+        <select id="filter-route" onchange="filterShipments()">
+          <option value="all">All routes</option>
+          <option value="Mumbai–Delhi">Mumbai–Delhi</option>
+          <option value="Chennai–Hyd">Chennai–Hyd</option>
+          <option value="Kolkata–Guw">Kolkata–Guw</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Shipments with DPS (Disruption Probability Score)</div>
+        <div class="card-subtitle">Click any row to expand · fusion of weather, traffic, port, driver-hours, and historical signals</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Shipment ID</th>
+                <th scope="col">Route</th>
+                <th scope="col">ETA</th>
+                <th scope="col">Status</th>
+                <th scope="col">DPS</th>
+                <th scope="col">Risk</th>
+                <th scope="col">Issue</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="shipments-tbody"></tbody>
+          </table>
+        </div>
+        <div class="card-footnote">DPS = weighted fusion of 5 signal types (weather, traffic, port, driver hours, historical pattern). Confidence reflects signal completeness. Reasoning is template-generated; production version pluggable to Gemini.</div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TAB 3 — SUPPLIER RISK + BLE                  -->
+    <!-- ============================================ -->
+    <div id="tab-supplier" class="tab-content hidden">
+
+      <!-- FRAMING PANEL — why this tab exists -->
+      <div class="framing-panel">
+        <div class="framing-eyebrow">Why this tab exists</div>
+        <div class="framing-headline">Your biggest supplier risk isn't the suppliers you see. It's the ones you don't.</div>
+        <div class="framing-body">
+          Existing platforms monitor your <strong>Tier 1 suppliers</strong> — the big vendors who sign your contracts. But those vendors depend on a long tail of <strong>small Tier 2/3 suppliers</strong> you never see. When something breaks upstream — a cold-chain failure in Nashik, a shock event in Firozabad, a factory offline in Bhagalpur — it surfaces as <em>your</em> problem weeks later, when an order fails.
+          <br><br>
+          <strong>The gap is not technology cost. It's reporting infrastructure.</strong> Small suppliers can't afford IoT. They do have smartphones. PathSetu turns those phones into the sensor layer — location, shock, photo, voice, even factory machine sound — and lifts the hidden 70% into view. For specialized cargo (cold-chain pharma, fragile electronics, high-value last-mile), optional hardware add-ons extend the phone with BLE tags or GPS trackers (see <em>Impact & ROI</em> tab for the three-tier economics).
+        </div>
+        <div class="framing-citations">
+          Sources: Over 90% of India's cold chain is fragmented and privately owned (Maersk / Indian Pharmaceutical Alliance, 2024). 20% of India's temperature-sensitive healthcare products arrive damaged due to broken cold chains (Intelsius / manufacturingchemist.com, 2024). Logistics cost 7.9% of GDP, targeting reduction via Tier 2/3 visibility (FICCI-Grant Thornton, 2026).
+        </div>
+      </div>
+
+      <!-- PHONE AS SENSOR — what each sensor sends -->
+      <div class="phone-section">
+        <div class="phone-section-header">
+          <div class="card-title">What each phone sensor actually sends</div>
+          <div class="card-subtitle">Installed on the supplier's existing Android. No hardware purchase, no vendor contracts — only an app install and a signed data-sharing MoU.</div>
+        </div>
+        <div class="phone-layout">
+          <div class="phone-mockup">
+            <div class="phone-mockup-caption">Supplier phone · concept</div>
+            <svg viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Supplier phone mockup showing PathSetu driver app with active sensors">
+              <!-- Phone body -->
+              <rect x="2" y="2" width="196" height="376" rx="22" ry="22" fill="var(--bg-primary)" stroke="var(--text-primary)" stroke-width="2.5"/>
+              <rect x="8" y="8" width="184" height="364" rx="16" ry="16" fill="var(--bg-secondary)"/>
+              <!-- Notch -->
+              <rect x="75" y="10" width="50" height="14" rx="7" ry="7" fill="var(--text-primary)"/>
+              <!-- Status bar -->
+              <text x="18" y="42" font-family="DM Sans" font-size="10" fill="var(--text-tertiary)">9:42</text>
+              <text x="170" y="42" font-family="DM Sans" font-size="10" fill="var(--text-tertiary)" text-anchor="end">4G</text>
+              <!-- App header -->
+              <text x="18" y="66" font-family="DM Sans" font-size="14" font-weight="600" fill="var(--text-primary)">PathSetu</text>
+              <text x="18" y="80" font-family="DM Sans" font-size="9" fill="var(--text-tertiary)">Ramesh K. · driver</text>
+              <!-- Active shipment card -->
+              <rect x="14" y="92" width="172" height="52" rx="8" fill="var(--bg-info)" opacity="0.35"/>
+              <text x="20" y="108" font-family="DM Sans" font-size="8" font-weight="600" fill="var(--text-info)" letter-spacing="0.5">ACTIVE SHIPMENT</text>
+              <text x="20" y="123" font-family="DM Sans" font-size="12" font-weight="600" fill="var(--text-primary)">BTX-448</text>
+              <text x="20" y="137" font-family="DM Sans" font-size="9" fill="var(--text-secondary)">Pune → Gurgaon · 2h left</text>
+              <!-- Sensor section title -->
+              <text x="18" y="168" font-family="DM Sans" font-size="9" font-weight="600" fill="var(--text-tertiary)" letter-spacing="0.5">SENSORS ACTIVE</text>
+              <!-- GPS row -->
+              <text x="18" y="188" font-family="DM Sans" font-size="10" fill="var(--text-primary)">GPS location</text>
+              <circle cx="158" cy="185" r="3" fill="#1d9e75"/>
+              <text x="182" y="188" font-family="DM Sans" font-size="9" fill="var(--text-success)" text-anchor="end">live</text>
+              <!-- Motion row -->
+              <text x="18" y="206" font-family="DM Sans" font-size="10" fill="var(--text-primary)">Motion</text>
+              <circle cx="158" cy="203" r="3" fill="#ef9f27"/>
+              <text x="182" y="206" font-family="DM Sans" font-size="9" fill="var(--text-warning)" text-anchor="end">alert</text>
+              <!-- QR row -->
+              <text x="18" y="224" font-family="DM Sans" font-size="10" fill="var(--text-primary)">QR scan</text>
+              <text x="182" y="224" font-family="DM Sans" font-size="9" fill="var(--text-tertiary)" text-anchor="end">tap</text>
+              <!-- Photo row -->
+              <text x="18" y="242" font-family="DM Sans" font-size="10" fill="var(--text-primary)">Photo log</text>
+              <text x="182" y="242" font-family="DM Sans" font-size="9" fill="var(--text-tertiary)" text-anchor="end">tap</text>
+              <!-- Alert callout -->
+              <rect x="14" y="258" width="172" height="44" rx="8" fill="var(--bg-warning)"/>
+              <text x="20" y="274" font-family="DM Sans" font-size="9" font-weight="600" fill="var(--text-warning)" letter-spacing="0.5">SHOCK DETECTED</text>
+              <text x="20" y="290" font-family="DM Sans" font-size="10" fill="var(--text-primary)">Handle with care</text>
+              <!-- Bottom bar -->
+              <rect x="14" y="316" width="172" height="48" rx="6" fill="var(--bg-primary)" stroke="var(--border-default)"/>
+              <circle cx="40" cy="340" r="8" fill="var(--blue)" opacity="0.85"/>
+              <rect x="74" y="332" width="16" height="16" rx="2" fill="var(--amber)" opacity="0.85"/>
+              <rect x="104" y="332" width="16" height="16" rx="2" fill="var(--gray)" opacity="0.85"/>
+              <circle cx="158" cy="340" r="8" fill="var(--green)" opacity="0.85"/>
+            </svg>
+          </div>
+          <div>
+            <table class="sensor-table">
+              <thead>
+                <tr>
+                  <th>Sensor</th>
+                  <th>Signal produced</th>
+                  <th>Feeds into</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="sensor-name">GPS</td>
+                  <td class="sensor-signal">Shipment ETA, geofence entry/exit, route drift</td>
+                  <td class="sensor-feeds"><span class="sensor-feeds-pill operational">Operational</span></td>
+                </tr>
+                <tr>
+                  <td class="sensor-name">Accelerometer</td>
+                  <td class="sensor-signal">Rough handling, drop events, road quality</td>
+                  <td class="sensor-feeds"><span class="sensor-feeds-pill operational">Operational</span></td>
+                </tr>
+                <tr>
+                  <td class="sensor-name">Camera</td>
+                  <td class="sensor-signal">QR scans, batch photos, damage proof</td>
+                  <td class="sensor-feeds"><span class="sensor-feeds-pill compliance">Compliance</span></td>
+                </tr>
+                <tr>
+                  <td class="sensor-name">Microphone</td>
+                  <td class="sensor-signal">Machine-sound anomaly at Tier 3 factories</td>
+                  <td class="sensor-feeds"><span class="sensor-feeds-pill operational">Operational</span></td>
+                </tr>
+                <tr>
+                  <td class="sensor-name">NFC</td>
+                  <td class="sensor-signal">Worker check-in, batch authenticity</td>
+                  <td class="sensor-feeds"><span class="sensor-feeds-pill compliance">Compliance</span></td>
+                </tr>
+                <tr>
+                  <td class="sensor-name">Network</td>
+                  <td class="sensor-signal">Facility presence, shift pattern</td>
+                  <td class="sensor-feeds"><span class="sensor-feeds-pill financial">Financial</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footnote">Without the phone layer, a Tier 3 handling event never reaches the Tier 1 risk score — the risk stays hidden until a shipment actually fails.</div>
+      </div>
+
+      <!-- ZERO-LITERACY UI — three gestures, no words -->
+      <div class="zero-lit-section">
+        <div class="card-title">Three gestures. No words.</div>
+        <div class="card-subtitle">Supplier interface for workers with zero literacy · uses only actions they already know from UPI and WhatsApp.</div>
+        <div class="zero-lit-layout" style="margin-top: 14px;">
+          <div class="zero-lit-phone">
+            <svg viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zero-literacy driver phone UI with three colored gesture buttons">
+              <!-- Phone body -->
+              <rect x="2" y="2" width="196" height="376" rx="22" ry="22" fill="var(--bg-primary)" stroke="var(--text-primary)" stroke-width="2.5"/>
+              <rect x="8" y="8" width="184" height="364" rx="16" ry="16" fill="var(--bg-secondary)"/>
+              <!-- Notch -->
+              <rect x="75" y="10" width="50" height="14" rx="7" ry="7" fill="var(--text-primary)"/>
+              <!-- Status bar -->
+              <text x="18" y="42" font-family="DM Sans" font-size="10" fill="var(--text-tertiary)">9:42</text>
+              <text x="170" y="42" font-family="DM Sans" font-size="10" fill="var(--text-tertiary)" text-anchor="end">4G</text>
+              <!-- Avatar + name -->
+              <circle cx="40" cy="80" r="16" fill="var(--border-default)"/>
+              <circle cx="40" cy="75" r="6" fill="var(--text-tertiary)"/>
+              <ellipse cx="40" cy="92" rx="10" ry="6" fill="var(--text-tertiary)"/>
+              <text x="64" y="80" font-family="DM Sans" font-size="13" font-weight="600" fill="var(--text-primary)">Ramesh</text>
+              <circle cx="68" cy="92" r="4" fill="var(--green)"/>
+              <!-- Truck icon decoration -->
+              <rect x="82" y="118" width="36" height="20" rx="3" fill="var(--blue)" opacity="0.3"/>
+              <rect x="100" y="110" width="20" height="18" rx="3" fill="var(--blue)" opacity="0.3"/>
+              <circle cx="92" cy="142" r="4" fill="var(--text-primary)"/>
+              <circle cx="112" cy="142" r="4" fill="var(--text-primary)"/>
+              <!-- Big QR button -->
+              <rect x="30" y="160" width="140" height="108" rx="16" fill="var(--blue)"/>
+              <!-- QR pattern inside -->
+              <rect x="72" y="192" width="18" height="18" rx="2" fill="#fff"/>
+              <rect x="110" y="192" width="18" height="18" rx="2" fill="#fff"/>
+              <rect x="72" y="230" width="18" height="18" rx="2" fill="#fff"/>
+              <rect x="116" y="234" width="4" height="4" fill="#fff"/>
+              <rect x="122" y="234" width="4" height="4" fill="#fff"/>
+              <rect x="116" y="240" width="4" height="4" fill="#fff"/>
+              <rect x="122" y="240" width="4" height="4" fill="#fff"/>
+              <!-- Bottom row: mic + camera -->
+              <rect x="30" y="282" width="64" height="64" rx="14" fill="var(--amber)"/>
+              <!-- Mic icon -->
+              <rect x="56" y="300" width="12" height="20" rx="6" fill="#fff"/>
+              <path d="M 50 316 Q 50 330 62 330 Q 74 330 74 316" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="62" y1="330" x2="62" y2="336" stroke="#fff" stroke-width="2.5"/>
+              <!-- Camera box -->
+              <rect x="106" y="282" width="64" height="64" rx="14" fill="var(--gray)"/>
+              <rect x="122" y="302" width="32" height="24" rx="3" fill="none" stroke="#fff" stroke-width="2"/>
+              <circle cx="138" cy="314" r="6" fill="none" stroke="#fff" stroke-width="2"/>
+              <rect x="130" y="298" width="8" height="4" rx="1" fill="#fff"/>
+            </svg>
+            <div class="zero-lit-phone-caption">Only the worker's name is text · everything else is shape and color.</div>
+          </div>
+          <div>
+            <div style="font-size: 12px; color: var(--text-primary); font-weight: 500; margin-bottom: 10px;">What each gesture does</div>
+            <div class="gesture-list">
+              <div class="gesture-card">
+                <div class="gesture-icon blue">▦</div>
+                <div class="gesture-body">
+                  <div class="gesture-title">Tap blue · scan a QR sticker</div>
+                  <div class="gesture-desc">On the truck, the crate, the factory door. Each sticker encodes one event type. <strong>Google ML Kit</strong> reads it offline · GPS + timestamp attached automatically.</div>
+                </div>
+              </div>
+              <div class="gesture-card">
+                <div class="gesture-icon amber">🎙</div>
+                <div class="gesture-body">
+                  <div class="gesture-title">Press amber · speak in any language</div>
+                  <div class="gesture-desc">WhatsApp-style hold to record. Hindi, Tamil, Bengali, any language. <strong>Google Speech-to-Text</strong> transcribes · <strong>Gemini</strong> classifies severity and maps to risk dimension.</div>
+                </div>
+              </div>
+              <div class="gesture-card">
+                <div class="gesture-icon gray">📷</div>
+                <div class="gesture-body">
+                  <div class="gesture-title">Tap gray · take a photo</div>
+                  <div class="gesture-desc">Of the goods, the damage, the delivery point. Geotag and timestamp auto-embedded. <strong>Gemini Vision</strong> reads the image and flags damage, spillage, or missing seals.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footnote">Three gestures, each using motor memory the worker already has from UPI QR payments and WhatsApp voice notes. You're not teaching anything new — you're reusing patterns they know.</div>
+      </div>
+
+      <!-- PHONE COVERAGE per Tier 1 supplier -->
+      <div class="coverage-list-section">
+        <div class="card-title">Phone coverage per Tier 1 supplier</div>
+        <div class="card-subtitle">Low phone penetration in a supplier's upstream chain means their Tier 1 score is based on fewer live signals. These are the gaps to close first.</div>
+        <div class="coverage-rows" id="coverage-rows"></div>
+        <div class="coverage-insight">
+          <strong>The actionable insight:</strong> Rajan Components already shows 78 · High in the Tier 1 panel below — but with only 2 of 9 upstream suppliers on phones, that score is based on partial visibility. The true risk could be higher. Prioritize onboarding Rajan's upstream suppliers next.
+        </div>
+      </div>
+
+      <!-- VACCINE COLD CHAIN SPOTLIGHT -->
+      <div class="spotlight-panel">
+        <div class="spotlight-eyebrow">Use case spotlight</div>
+        <div class="spotlight-headline">Vaccine cold chain — where Tier 2/3 visibility becomes a public health outcome</div>
+        <div class="spotlight-body">
+          Vaccines in India often travel through <strong>Tier 2/3 cold-chain operators</strong> — small transporters covering the last 50 km from district depot to primary health centre. When the reefer truck fails somewhere in that last mile, no one knows until the vaccine arrives at its destination, often hours later. By then, doses are already compromised.
+          <br><br>
+          <strong>With a phone-based BLE temperature tag on each vaccine box</strong>, the moment temperature crosses the safe range (2–8°C for most vaccines), both the district depot and the destination PHC are alerted in real time. Doses can be recalled or diverted before administration. One workflow. Three SDGs.
+        </div>
+        <div class="spotlight-workflow">
+          <div class="spotlight-workflow-title">Workflow</div>
+          <div class="workflow-steps">
+            <span class="workflow-step">Depot dispatch</span>
+            <span class="workflow-arrow">→</span>
+            <span class="workflow-step">Phone pairs with BLE tag</span>
+            <span class="workflow-arrow">→</span>
+            <span class="workflow-step">Transit upload every 5 min</span>
+            <span class="workflow-arrow">→</span>
+            <span class="workflow-step">Temp breach = instant alert</span>
+            <span class="workflow-arrow">→</span>
+            <span class="workflow-step">PHC quarantines before use</span>
+          </div>
+        </div>
+        <div class="spotlight-sdg-row">
+          <span class="sdg-chip"><strong>SDG 3</strong> Good Health & Well-being</span>
+          <span class="sdg-chip"><strong>SDG 9</strong> Industry, Innovation, Infrastructure</span>
+          <span class="sdg-chip"><strong>SDG 10</strong> Reduced Inequalities</span>
+        </div>
+      </div>
+
+      <!-- EXISTING 3 BLE USE CASES (kept, still relevant) -->
+      <div class="ble-section">
+        <div class="card-title">Sensor add-ons available at anchor-buyer subsidy</div>
+        <div class="card-subtitle">The phone app is the baseline; these small BLE/GPS sensors extend it for specialized cargo types.</div>
+        <div class="ble-usecases" style="margin-top: 14px;">
+          <div class="ble-usecase">
+            <div class="ble-usecase-icon">❄</div>
+            <div class="ble-usecase-title">Cold Chain Monitoring</div>
+            <div class="ble-usecase-desc">BLE temperature/humidity tag on cold-storage unit. Supplier phone uploads readings every 5 min. Instant alert when temp exits safe range. For pharma, dairy, frozen food suppliers.</div>
+            <div class="ble-usecase-cost">~₹1,200 per tag · market estimate</div>
+          </div>
+          <div class="ble-usecase">
+            <div class="ble-usecase-icon">⚡</div>
+            <div class="ble-usecase-title">Fragile Goods Tracking</div>
+            <div class="ble-usecase-desc">Bluetooth shock/accelerometer sensor on crate. Logs excessive G-force events with GPS and timestamp. Correlates with damage claims. For electronics, glass, auto parts.</div>
+            <div class="ble-usecase-cost">~₹2,500 per sensor · market estimate</div>
+          </div>
+          <div class="ble-usecase">
+            <div class="ble-usecase-icon">📍</div>
+            <div class="ble-usecase-title">Last-Mile Tracking</div>
+            <div class="ble-usecase-desc">4G GPS tracker reports location, speed, engine status every 2 min. Accurate ETA, unplanned stop detection. Driver phone separate — used for pothole reports and signatures.</div>
+            <div class="ble-usecase-cost">~₹3,500 per truck · market estimate</div>
+          </div>
+        </div>
+
+        <div class="ble-coverage" style="margin-top: 14px;">
+          <div class="ble-coverage-title">Current Tier 2/3 network coverage (demo data)</div>
+          <div class="coverage-bar">
+            <div class="coverage-segment connected" style="width: 55%;">55% connected</div>
+            <div class="coverage-segment pending" style="width: 25%;">25% pending</div>
+            <div class="coverage-segment offline" style="width: 20%;">20% offline</div>
+          </div>
+          <div class="coverage-legend">
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#1d9e75"></span>Connected (55 suppliers · active BLE/GPS)</span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#ef9f27"></span>Pending (25 · onboarding)</span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#888780"></span>Offline (20 · not yet in program)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="tier1-divider">
+        <div class="tier1-divider-line"></div>
+        <div class="tier1-divider-text">Tier 1 — the visible layer</div>
+        <div class="tier1-divider-line"></div>
+      </div>
+
+      <!-- TIER 1 SUPPLIER CONTENT (moved below Tier 2/3) -->
+      <div class="metrics-row" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="metric-card">
+          <div class="metric-label">Low risk suppliers</div>
+          <div class="metric-value">18</div>
+          <div class="metric-sub success">No action needed</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Medium risk suppliers</div>
+          <div class="metric-value">7</div>
+          <div class="metric-sub warning">Monitor closely</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">High risk suppliers</div>
+          <div class="metric-value">2</div>
+          <div class="metric-sub danger">Activate backup</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Tier 1 supplier risk scores</div>
+          <div class="card-subtitle">Signals: delivery history, financial stress, news, social</div>
+          <div class="supplier-grid" id="supplier-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">What's driving risk scores</div>
+          <div class="card-subtitle">Breakdown of risk signal types</div>
+          <div class="chart-wrapper">
+            <canvas id="riskSignalChart" role="img" aria-label="Risk signals breakdown chart">
+              Delivery delays 42%, financial stress 28%, news signals 18%, social signals 12%
+            </canvas>
+          </div>
+          <div class="chart-legend">
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#e24b4a"></span>Delivery delays · 42%</span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#ef9f27"></span>Financial stress · 28%</span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#378add"></span>News signals · 18%</span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#888780"></span>Social signals · 12%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TAB 4 — COORDINATION                         -->
+    <!-- ============================================ -->
+    <div id="tab-coordination" class="tab-content hidden">
+
+      <div class="framing-panel compact">
+        <div class="framing-eyebrow">What you see here</div>
+        <div class="framing-headline">When a disruption hits, 4 teams need to act in 10 minutes. This is the war room.</div>
+        <div class="framing-body">
+          Most dashboards stop at detection. PathSetu continues into <strong>cross-team coordination</strong> — auto-generated task lists for Logistics, Warehouse, Customer Service, and Procurement with urgency levels and dependencies. Team filters let each function see only their work. The AI-generated incident summary turns 12 signals into a 4-sentence brief any team lead can act on immediately.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="incident-header">
+          <div class="incident-title">Cross-team coordination — active incident</div>
+          <div class="incident-meta">NH44 waterlogging · 38 shipments affected</div>
+        </div>
+
+        <div class="team-pills">
+          <button class="team-pill active" onclick="filterTeam('all', this)">All teams</button>
+          <button class="team-pill" onclick="filterTeam('Logistics', this)">Logistics</button>
+          <button class="team-pill" onclick="filterTeam('Warehouse', this)">Warehouse</button>
+          <button class="team-pill" onclick="filterTeam('Customer service', this)">Customer service</button>
+          <button class="team-pill" onclick="filterTeam('Procurement', this)">Procurement</button>
+        </div>
+
+        <div class="task-list" id="task-list"></div>
+
+        <div class="ai-summary-section">
+          <div class="ai-summary-title">AI-generated incident summary</div>
+          <div class="ai-summary-box">
+            3 of your 38 trucks heading to Delhi are blocked on NH44 near Guwahati due to waterlogging. The alternate route via NH37 adds 52 minutes but is currently clear. Warehouse Delhi-4 should expect goods 1.4 hrs later than scheduled. 22 customers are due for an ETA update. Procurement should check buffer stock for SKUs TK-440 and TK-441 in case restocking is needed early.
+          </div>
+          <div class="template-button-wrapper">
+            <button class="btn-primary" onclick="handleActionClick(this,'template')">Get customer message template →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TAB 5 — TRENDS                               -->
+    <!-- ============================================ -->
+    <div id="tab-trends" class="tab-content hidden">
+
+      <div class="framing-panel compact">
+        <div class="framing-eyebrow">What you see here</div>
+        <div class="framing-headline">The patterns that matter. Disruption intelligence across your fleet, last 30 days.</div>
+        <div class="framing-body">
+          Operations data becomes strategy data. <strong>Detected vs. resolved</strong> shows whether your team is keeping pace with incoming disruptions. <strong>On-time delivery trend</strong> proves impact — the 13-point lift from 74% to 87% is the ROI story in one chart. <strong>Disruption categories</strong> tells you where to invest: if weather is 34% of your risk, that's the budget conversation.
+        </div>
+      </div>
+
+      <div class="trends-row">
+        <div class="card">
+          <div class="card-title">Disruptions detected vs. resolved</div>
+          <div class="card-subtitle">Last 7 days</div>
+          <div class="chart-wrapper short">
+            <canvas id="trendsChart" role="img" aria-label="Disruptions detected vs resolved chart">
+              Detected: 12,18,9,22,15,8,14. Resolved: 10,15,9,19,15,8,12.
+            </canvas>
+          </div>
+          <div class="chart-legend">
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#e24b4a"></span>Detected</span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#1d9e75"></span>Resolved</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">On-time delivery rate</div>
+          <div class="card-subtitle">Last 8 weeks · PathSetu impact</div>
+          <div class="chart-wrapper short">
+            <canvas id="onTimeChart" role="img" aria-label="On-time delivery rate">
+              74, 76, 78, 79, 82, 83, 85, 87 percent.
+            </canvas>
+          </div>
+          <div class="chart-legend">
+            <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#1d9e75"></span>On-time %</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Disruption categories — last 30 days</div>
+        <div class="card-subtitle">Breakdown by disruption type</div>
+        <div class="chart-wrapper">
+          <canvas id="categoryChart" role="img" aria-label="Disruption categories chart">
+            Weather 34%, traffic 26%, port 18%, supplier 14%, other 8%.
+          </canvas>
+        </div>
+        <div class="chart-legend">
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#378add"></span>Weather · 34%</span>
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#ef9f27"></span>Traffic · 26%</span>
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#e24b4a"></span>Port congestion · 18%</span>
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#888780"></span>Supplier risk · 14%</span>
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#b4b2a9"></span>Other · 8%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TAB 6 — IMPACT & ROI                         -->
+    <!-- ============================================ -->
+    <div id="tab-roi" class="tab-content hidden">
+
+      <div class="framing-panel compact">
+        <div class="framing-eyebrow">What you see here</div>
+        <div class="framing-headline">Who pays for Tier 2/3 visibility? The anchor buyer. Here's why the math works.</div>
+        <div class="framing-body">
+          This calculator models the <strong>anchor-buyer subsidy model</strong> — where the large buyer (Tata, Mahindra, Reliance, etc.) funds digitization of their Tier 2/3 supplier network, then recoups the investment through prevented disruptions. Typical payback: under 6 months. CSR-eligible under Companies Act 2013 Section 135.
+        </div>
+      </div>
+
+      <div class="roi-intro">
+        <div class="roi-intro-title">Three tiers of Tier 2/3 visibility — each with its own economics</div>
+        <strong>Tier A (baseline):</strong> The PathSetu app on the supplier's existing Android phone. Zero hardware. Covers <strong>80%+ of Tier 2/3 use cases</strong> — GPS, shock via phone accelerometer, photo proof, voice reports, NFC check-ins, machine-sound anomaly. Anchor buyer may sponsor ~₹200/month data to guarantee uptime.
+        <br><br>
+        <strong>Tier B & C (optional add-ons):</strong> For specific cargo types where the phone alone is insufficient — cold-chain pharma needs precision BLE temperature tags; fragile electronics need continuous BLE shock sensors independent of driver phone orientation; high-value last-mile cargo needs tamper-proof 4G GPS trackers on the vehicle. These add one-time hardware costs, subsidized by the anchor buyer.
+        <br><br>
+        <strong>Switch between tiers below</strong> to see how the math changes for each use case.
+      </div>
+
+      <div class="usecase-tabs">
+        <button class="usecase-tab active" onclick="switchUseCase('phone', this)">📱 Tier A · Phone-only (baseline)</button>
+        <button class="usecase-tab" onclick="switchUseCase('cold', this)">❄ Tier B · Cold-chain add-on</button>
+        <button class="usecase-tab" onclick="switchUseCase('fragile', this)">⚡ Tier C · Fragile-goods add-on</button>
+        <button class="usecase-tab" onclick="switchUseCase('lastmile', this)">📍 Tier C · Last-mile add-on</button>
+      </div>
+
+      <div class="roi-layout">
+        <div class="roi-inputs">
+          <div class="card-title" id="usecase-title">Tier A · Phone-only baseline</div>
+          <div class="card-subtitle" id="usecase-subtitle">PathSetu app on existing Android · zero hardware · universal rollout</div>
+
+          <div class="roi-input-row">
+            <div class="roi-input-row-header">
+              <span class="roi-input-label">Suppliers to equip</span>
+              <span class="roi-input-value" id="suppliers-value">200</span>
+            </div>
+            <input type="range" min="10" max="500" value="200" id="suppliers-slider" oninput="updateROI()">
+          </div>
+
+          <div class="roi-input-row">
+            <div class="roi-input-row-header">
+              <span class="roi-input-label">Avg cost per disruption (₹)</span>
+              <span class="roi-input-value" id="cost-value">1,50,000</span>
+            </div>
+            <input type="range" min="50000" max="5000000" step="50000" value="150000" id="cost-slider" oninput="updateROI()">
+          </div>
+
+          <div class="roi-input-row">
+            <div class="roi-input-row-header">
+              <span class="roi-input-label">Current disruptions/year</span>
+              <span class="roi-input-value" id="incidents-value">30</span>
+            </div>
+            <input type="range" min="1" max="50" value="30" id="incidents-slider" oninput="updateROI()">
+          </div>
+
+          <div class="roi-input-row">
+            <div class="roi-input-row-header">
+              <span class="roi-input-label">Expected detection improvement</span>
+              <span class="roi-input-value" id="detection-value">55%</span>
+            </div>
+            <input type="range" min="10" max="95" value="55" id="detection-slider" oninput="updateROI()">
+          </div>
+
+          <div class="card-footnote">Phone-only tier has ₹0 hardware cost. Sliders show universal Tier 2/3 rollout scenario. Switch tabs above to see add-on economics.</div>
+        </div>
+
+        <div class="roi-outputs">
+          <div class="card-title">Financial outcome</div>
+          <div class="card-subtitle">Based on your inputs</div>
+
+          <div class="roi-output-row">
+            <span class="roi-output-label">Per-supplier kit cost</span>
+            <span class="roi-output-value" id="kit-cost">₹ 0</span>
+          </div>
+          <div class="roi-output-row">
+            <span class="roi-output-label">One-time subsidy</span>
+            <span class="roi-output-value" id="total-cost">₹ 0</span>
+          </div>
+          <div class="roi-output-row">
+            <span class="roi-output-label">Annual recurring (app + data)</span>
+            <span class="roi-output-value" id="recurring-cost">₹ 4.80 lakh/yr</span>
+          </div>
+          <div class="roi-output-row">
+            <span class="roi-output-label">Annual savings from prevention</span>
+            <span class="roi-output-value big" id="annual-savings">₹ 24.75 lakh</span>
+          </div>
+          <div class="roi-output-row">
+            <span class="roi-output-label">Payback period</span>
+            <span class="roi-output-value" id="payback">Immediate</span>
+          </div>
+
+          <div class="roi-highlight-row">
+            <span class="roi-highlight-label">5-year net benefit</span>
+            <span class="roi-highlight-value" id="five-year">₹ 99.75 lakh</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">5-year cumulative net savings projection</div>
+        <div class="card-subtitle">Interactive · updates with your inputs</div>
+        <div class="chart-wrapper tall">
+          <canvas id="savingsChart" role="img" aria-label="5-year cumulative savings projection">
+            5-year cumulative savings bar chart.
+          </canvas>
+        </div>
+      </div>
+
+      <div class="csr-box">
+        <div class="csr-box-title">CSR compliance — why this is legally real in India</div>
+        <div class="csr-box-subtitle">Under Companies Act 2013 Section 135, anchor-buyer subsidy programs for Tier 2/3 digitization qualify as CSR expenditure</div>
+
+        <div class="csr-list">
+          <div class="csr-item">
+            <span class="csr-check">✓</span>
+            <span class="csr-item-text"><strong>Schedule VII clause (ii)</strong> — "Employment-enhancing vocation skills... and livelihood enhancement projects." Funding Tier 2/3 digitization directly enhances supplier livelihoods.</span>
+          </div>
+          <div class="csr-item">
+            <span class="csr-check">✓</span>
+            <span class="csr-item-text"><strong>Schedule VII clause (ix)</strong> — "Contributions to technology incubators" and related innovation activities. Sensor kit deployment fits within this clause when structured through an eligible entity.</span>
+          </div>
+          <div class="csr-item">
+            <span class="csr-check">✓</span>
+            <span class="csr-item-text"><strong>2% mandate applies</strong> — Companies with turnover ≥ ₹1,000 crore / net worth ≥ ₹500 crore / net profit ≥ ₹5 crore must spend 2% of 3-year average net profit on CSR. PathSetu subsidy programs fit within existing obligation — not incremental budget ask.</span>
+          </div>
+          <div class="csr-item">
+            <span class="csr-check">✓</span>
+            <span class="csr-item-text"><strong>Structuring note:</strong> Implementation typically via Section 8 company, registered trust, or registered society (12A + 80G). Ministry of Corporate Affairs has clarified Schedule VII is an illustrative list to be interpreted liberally.</span>
+          </div>
+        </div>
+
+        <div class="card-footnote">Legal references: Companies Act 2013 Section 135; Schedule VII; Companies (CSR Policy) Amendment Rules, 2021. Tax treatment varies by structuring; consult a qualified advisor. Not legal or tax advice.</div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="app-footer">
+    <strong>PathSetu</strong> · Built for Google Solution Challenge 2026 · UN SDGs 9, 12, 3, 8, 10, 13<br>
+    Data sources: curated Indian news (15 verified real headlines), market estimates for sensor costs, FICCI-Grant Thornton logistics report 2026, CII Supply Chain Vision 2030 (Arthur D. Little), Maersk/Indian Pharmaceutical Alliance 2024 (cold-chain fragmentation), Intelsius 2024 (healthcare damage), Companies Act 2013 Section 135 + Schedule VII (CSR), NITI Aayog heavy-commercial-vehicle emissions factor (~0.685 kg CO₂/km for reroute carbon math).<br>
+    Demo mode · production architecture: Gemini (news classification), OpenWeatherMap (live weather), NewsAPI (headlines), Google Maps Platform / Fleet Engine (tracking + routing), Google Waze (crowdsourced road quality), Google ML Kit + Speech-to-Text + Gemini Vision (driver phone app), Google Cloud Run (backend).
+  </footer>
+
+</div>
+
+<script>
+// ============================================
+// STATE
+// ============================================
+let atRiskCount = 47;
+let activeTeamFilter = 'all';
+let chartsInitialized = { supplier: false, trends: false, roi: false };
+let clockSeconds = 0;
+let expandedShipment = null;
+let currentUseCase = 'phone';
+let savingsChartInstance = null;
+
+const shipments = [
+  { id: 'SH-4421', route: 'Mumbai–Delhi',  eta: 'Today 18:30',    status: 'at-risk',  risk: 'High', issue: 'Weather ahead', action: 'reroute',
+    dps: { score: 78, confidence: 89, factors: [
+      { name: 'Weather severity', points: 32 },
+      { name: 'Port congestion (upstream)', points: 22 },
+      { name: 'Driver HoS remaining', points: 14 },
+      { name: 'Historical delay pattern', points: 10 }
+    ]}},
+  { id: 'SH-4422', route: 'Mumbai–Delhi',  eta: 'Today 17:45',    status: 'on-track', risk: 'Low',  issue: '—', action: null,
+    dps: { score: 18, confidence: 82, factors: [
+      { name: 'Weather severity', points: 8 },
+      { name: 'Traffic index', points: 6 },
+      { name: 'Port congestion (upstream)', points: 4 },
+      { name: 'Driver HoS remaining', points: 0 }
+    ]}},
+  { id: 'SH-4423', route: 'Kolkata–Guw',   eta: 'Tomorrow 09:00', status: 'delayed',  risk: 'High', issue: 'Road blocked', action: 'reroute',
+    dps: { score: 88, confidence: 92, factors: [
+      { name: 'Road closure (NH44)', points: 40 },
+      { name: 'Weather severity', points: 28 },
+      { name: 'Driver HoS remaining', points: 12 },
+      { name: 'Historical pattern', points: 8 }
+    ]}},
+  { id: 'SH-4424', route: 'Chennai–Hyd',   eta: 'Today 20:15',    status: 'rerouted', risk: 'Med',  issue: 'Traffic jam', action: null,
+    dps: { score: 52, confidence: 75, factors: [
+      { name: 'Traffic index', points: 28 },
+      { name: 'Weather severity', points: 14 },
+      { name: 'Driver HoS remaining', points: 8 },
+      { name: 'Historical pattern', points: 2 }
+    ]}},
+  { id: 'SH-4425', route: 'Chennai–Hyd',   eta: 'Today 19:50',    status: 'on-track', risk: 'Low',  issue: '—', action: null,
+    dps: { score: 22, confidence: 80, factors: [
+      { name: 'Traffic index', points: 12 },
+      { name: 'Weather severity', points: 6 },
+      { name: 'Port congestion (upstream)', points: 4 },
+      { name: 'Driver HoS remaining', points: 0 }
+    ]}},
+  { id: 'SH-4426', route: 'Kolkata–Guw',   eta: 'Tomorrow 11:30', status: 'at-risk',  risk: 'High', issue: 'Flood warning', action: 'reroute',
+    dps: { score: 82, confidence: 86, factors: [
+      { name: 'Weather severity', points: 36 },
+      { name: 'Road closure (NH44)', points: 28 },
+      { name: 'Historical pattern (monsoon)', points: 12 },
+      { name: 'Driver HoS remaining', points: 6 }
+    ]}},
+  { id: 'SH-4427', route: 'Mumbai–Delhi',  eta: 'Today 21:00',    status: 'on-track', risk: 'Low',  issue: '—', action: null,
+    dps: { score: 16, confidence: 78, factors: [
+      { name: 'Weather severity', points: 6 },
+      { name: 'Traffic index', points: 6 },
+      { name: 'Port congestion (upstream)', points: 4 },
+      { name: 'Driver HoS remaining', points: 0 }
+    ]}},
+  { id: 'SH-4428', route: 'Chennai–Hyd',   eta: 'Tomorrow 08:00', status: 'at-risk',  risk: 'Med',  issue: 'Port delay', action: 'notify',
+    dps: { score: 58, confidence: 81, factors: [
+      { name: 'Port congestion (JNPT)', points: 30 },
+      { name: 'Traffic index', points: 14 },
+      { name: 'Weather severity', points: 10 },
+      { name: 'Driver HoS remaining', points: 4 }
+    ]}}
+];
+
+const suppliers = [
+  { name: 'Verma Steels',     loc: 'Pune, MH',       score: 12, level: 'low' },
+  { name: 'Rajan Components', loc: 'Chennai, TN',    score: 78, level: 'high' },
+  { name: 'AK Plastics',      loc: 'Surat, GJ',      score: 45, level: 'med' },
+  { name: 'Bharat Textiles',  loc: 'Ludhiana, PB',   score: 22, level: 'low' },
+  { name: 'Horizon Circuits', loc: 'Bengaluru, KA',  score: 61, level: 'med' },
+  { name: 'PrimePack Ltd',    loc: 'Noida, UP',      score: 88, level: 'high' },
+  { name: 'SwiftMetal Co',    loc: 'Coimbatore, TN', score: 18, level: 'low' },
+  { name: 'Delta Polymers',   loc: 'Ahmedabad, GJ',  score: 34, level: 'low' }
+];
+
+let tasks = [
+  { text: 'Re-route 38 trucks via NH37',                           team: 'Logistics',        urgency: 'now',  done: false },
+  { text: 'Update Delhi-4 warehouse receiving schedule +1.4 hrs',  team: 'Warehouse',        urgency: 'now',  done: false },
+  { text: 'Send delay notification to 22 affected customers',      team: 'Customer service', urgency: 'now',  done: false },
+  { text: 'Check buffer stock for SKU TK-440, TK-441',             team: 'Procurement',      urgency: 'soon', done: false },
+  { text: 'Confirm NH37 capacity with 3PL partner',                team: 'Logistics',        urgency: 'soon', done: false },
+  { text: 'Update delivery ETAs in order management system',       team: 'Customer service', urgency: 'soon', done: false },
+  { text: 'Flag Rajan Components as at-risk in supplier registry', team: 'Procurement',      urgency: 'soon', done: false },
+  { text: 'Prepare incident report for management',                team: 'Logistics',        urgency: 'soon', done: true  }
+];
+
+// ROI use case configurations
+const useCaseConfig = {
+  phone: {
+    title: 'Tier A · Phone-only baseline',
+    subtitle: 'PathSetu app on existing Android · zero hardware · universal rollout',
+    kitCost: 0,
+    annualPerSupplier: 2400,   // ~₹200/month data sponsorship
+    defaults: { suppliers: 200, cost: 150000, incidents: 30, detection: 55 }
+  },
+  cold: {
+    title: 'Tier B · Cold-chain add-on',
+    subtitle: 'Pharma, dairy, frozen food · BLE temperature tags on cargo',
+    kitCost: 1200,
+    annualPerSupplier: 600,   // app + data
+    defaults: { suppliers: 100, cost: 500000, incidents: 8, detection: 70 }
+  },
+  fragile: {
+    title: 'Tier C · Fragile-goods add-on',
+    subtitle: 'Electronics, glass, auto parts · Bluetooth shock sensors on crate',
+    kitCost: 2500,
+    annualPerSupplier: 800,
+    defaults: { suppliers: 100, cost: 200000, incidents: 20, detection: 60 }
+  },
+  lastmile: {
+    title: 'Tier C · Last-mile add-on',
+    subtitle: 'Small transporters, rural carriers · tamper-proof 4G GPS trackers',
+    kitCost: 3500,
+    annualPerSupplier: 1800,  // higher data usage
+    defaults: { suppliers: 50,  cost: 75000,  incidents: 40, detection: 80 }
+  }
+};
+
+// ============================================
+// HELPERS
+// ============================================
+function formatINR(amount) {
+  if (amount >= 10000000) return '₹ ' + (amount / 10000000).toFixed(2) + ' crore';
+  if (amount >= 100000)   return '₹ ' + (amount / 100000).toFixed(2) + ' lakh';
+  if (amount >= 1000)     return '₹ ' + Math.round(amount).toLocaleString('en-IN');
+  return '₹ ' + Math.round(amount);
+}
+
+function dpsLevel(score) {
+  if (score < 35) return 'low';
+  if (score < 65) return 'med';
+  return 'high';
+}
+
+function generateReasoning(dps) {
+  const top = dps.factors.slice().sort((a, b) => b.points - a.points).slice(0, 2);
+  const a = top[0], b = top[1];
+  const level = dpsLevel(dps.score);
+
+  let lead;
+  if (level === 'high') {
+    lead = `High-risk shipment. ${a.name} (+${a.points}) and ${b.name} (+${b.points}) are the dominant factors.`;
+  } else if (level === 'med') {
+    lead = `Moderate risk. ${a.name} (+${a.points}) is the primary driver, with ${b.name} (+${b.points}) contributing.`;
+  } else {
+    lead = `Low risk profile. Minor contribution from ${a.name} (+${a.points}); no critical factors flagged.`;
+  }
+
+  let tail;
+  if (level === 'high' && dps.confidence >= 85) {
+    tail = ' Historical pattern suggests >75% probability of >4 hr delay.';
+  } else if (level === 'high') {
+    tail = ' Signal fusion is directional; more data recommended.';
+  } else if (level === 'med') {
+    tail = ' Early rerouting recommended; impact likely containable.';
+  } else {
+    tail = ' Continue routine monitoring.';
+  }
+
+  return lead + tail;
+}
+
+// ============================================
+// TAB SWITCHING
+// ============================================
+function switchTab(tabName, clickedElement) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.getElementById('tab-' + tabName).classList.remove('hidden');
+
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  clickedElement.classList.add('active');
+
+  if (tabName === 'supplier' && !chartsInitialized.supplier) {
+    initSupplierChart();
+    chartsInitialized.supplier = true;
+  }
+  if (tabName === 'trends' && !chartsInitialized.trends) {
+    initTrendsCharts();
+    chartsInitialized.trends = true;
+  }
+  if (tabName === 'roi' && !chartsInitialized.roi) {
+    initROIChart();
+    chartsInitialized.roi = true;
+  }
+}
+
+// ============================================
+// RISK PREDICTOR
+// ============================================
+function updateRisk() {
+  const weather = parseInt(document.getElementById('weather-slider').value);
+  const traffic = parseInt(document.getElementById('traffic-slider').value);
+  const port = parseInt(document.getElementById('port-slider').value);
+
+  document.getElementById('weather-value').textContent = weather;
+  document.getElementById('traffic-value').textContent = traffic;
+  document.getElementById('port-value').textContent = port;
+
+  const score = Math.round(weather * 4.2 + traffic * 2.8 + port * 1.5);
+  const valueEl = document.getElementById('predictor-value');
+  const descEl = document.getElementById('predictor-desc');
+
+  valueEl.textContent = score;
+  valueEl.classList.remove('green', 'amber', 'red');
+
+  if (score < 30) {
+    valueEl.classList.add('green');
+    descEl.textContent = 'Low risk — normal operations';
+  } else if (score <= 60) {
+    valueEl.classList.add('amber');
+    descEl.textContent = 'Moderate risk — recommend early rerouting';
+  } else {
+    valueEl.classList.add('red');
+    descEl.textContent = 'High risk — trigger immediate action plan';
+  }
+
+  // Also update fleet DPS (not tied to sliders directly, but slightly reactive)
+  updateFleetDPS();
+}
+
+function updateFleetDPS() {
+  const avgDPS = Math.round(shipments.reduce((s, x) => s + x.dps.score, 0) / shipments.length);
+  const avgConf = Math.round(shipments.reduce((s, x) => s + x.dps.confidence, 0) / shipments.length);
+  const el = document.getElementById('fleet-dps-value');
+  const confEl = document.getElementById('fleet-dps-conf');
+  if (!el) return;
+  el.textContent = avgDPS;
+  confEl.textContent = 'conf. ' + avgConf + '%';
+  const level = dpsLevel(avgDPS);
+  if (level === 'low')  el.style.color = 'var(--text-success)';
+  if (level === 'med')  el.style.color = 'var(--text-warning)';
+  if (level === 'high') el.style.color = 'var(--text-danger)';
+}
+
+// ============================================
+// SHIPMENTS
+// ============================================
+function renderShipments(list) {
+  const tbody = document.getElementById('shipments-tbody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 24px; color: var(--text-tertiary);">No shipments match the current filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map((s, i) => {
+    const statusLabel = s.status.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const riskClass = s.risk === 'High' ? 'danger' : (s.risk === 'Med' ? 'warning' : 'success');
+    let actionHtml = '—';
+    if (s.action === 'reroute') {
+      actionHtml = '<button class="btn-primary" onclick="event.stopPropagation(); handleActionClick(this,\'reroute\')">Re-route ↗</button>';
+    } else if (s.action === 'notify') {
+      actionHtml = '<button class="btn-primary" onclick="event.stopPropagation(); handleActionClick(this,\'notify_customers\')">Notify ↗</button>';
+    }
+    const dpsClass = dpsLevel(s.dps.score);
+    const mainRow = `<tr onclick="toggleDPSPanel('${s.id}')" class="${expandedShipment === s.id ? 'expanded' : ''}">
+      <td><span class="mono">${s.id}</span></td>
+      <td>${s.route}</td>
+      <td>${s.eta}</td>
+      <td><span class="status-dot ${s.status}"></span>${statusLabel}</td>
+      <td>
+        <div class="dps-cell">
+          <span class="dps-score ${dpsClass}">${s.dps.score}</span>
+          <div class="dps-bar"><div class="dps-bar-fill ${dpsClass}" style="width: ${s.dps.score}%;"></div></div>
+        </div>
+      </td>
+      <td><span class="pill ${riskClass}">${s.risk}</span></td>
+      <td>${s.issue}</td>
+      <td>${actionHtml}</td>
+    </tr>`;
+
+    let panelRow = '';
+    if (expandedShipment === s.id) {
+      const reasoning = generateReasoning(s.dps);
+      const factors = s.dps.factors.map(f =>
+        `<div class="dps-factor">
+          <span class="dps-factor-name">${f.name}</span>
+          <span class="dps-factor-points">+${f.points} pts</span>
+        </div>`
+      ).join('');
+      panelRow = `<tr><td colspan="8" style="padding: 0 8px 12px 8px;">
+        <div class="dps-panel">
+          <div class="dps-panel-header">
+            <div class="dps-gauge">
+              <div class="dps-gauge-score ${dpsClass}">${s.dps.score}</div>
+              <div>
+                <div class="dps-gauge-label">DPS Score</div>
+                <div style="font-size: 11px; color: var(--text-tertiary);">0–100 scale</div>
+              </div>
+            </div>
+            <div class="dps-confidence">
+              <div class="dps-gauge-label">Confidence ${s.dps.confidence}%</div>
+              <div class="confidence-bar-container">
+                <div class="confidence-bar-fill" style="width: ${s.dps.confidence}%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="dps-reasoning">"${reasoning}"</div>
+          <div class="dps-factors">${factors}</div>
+        </div>
+      </td></tr>`;
+    }
+
+    return mainRow + panelRow;
+  }).join('');
+}
+
+function toggleDPSPanel(id) {
+  expandedShipment = (expandedShipment === id) ? null : id;
+  filterShipments();
+}
+
+function filterShipments() {
+  const status = document.getElementById('filter-status').value;
+  const route = document.getElementById('filter-route').value;
+  const filtered = shipments.filter(s =>
+    (status === 'all' || s.status === status) &&
+    (route === 'all' || s.route === route)
+  );
+  renderShipments(filtered);
+}
+
+// ============================================
+// SUPPLIERS
+// ============================================
+function renderSuppliers() {
+  const grid = document.getElementById('supplier-grid');
+  grid.innerHTML = suppliers.map(s => {
+    const pillClass = s.level === 'high' ? 'danger' : (s.level === 'med' ? 'warning' : 'success');
+    const levelLabel = s.level === 'high' ? 'High' : (s.level === 'med' ? 'Med' : 'Low');
+    return `<div class="supplier-card">
+      <div class="supplier-head">
+        <div>
+          <div class="supplier-name">${s.name}</div>
+          <div class="supplier-loc">${s.loc}</div>
+        </div>
+        <span class="pill ${pillClass}">${s.score} · ${levelLabel}</span>
+      </div>
+      <div class="risk-bar">
+        <div class="risk-bar-fill ${s.level}" style="width: ${s.score}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================
+// PHONE COVERAGE PER TIER 1 SUPPLIER
+// ============================================
+const phoneCoverage = [
+  { name: 'Verma Steels',     covered: 8,  total: 12, status: 'good' },
+  { name: 'Rajan Components', covered: 2,  total: 9,  status: 'hidden' },
+  { name: 'AK Plastics',      covered: 4,  total: 8,  status: 'partial' },
+  { name: 'Bharat Textiles',  covered: 10, total: 11, status: 'good' },
+  { name: 'Horizon Circuits', covered: 3,  total: 10, status: 'hidden' },
+  { name: 'PrimePack Ltd',    covered: 5,  total: 14, status: 'partial' },
+  { name: 'SwiftMetal Co',    covered: 7,  total: 10, status: 'good' },
+  { name: 'Delta Polymers',   covered: 6,  total: 9,  status: 'good' }
+];
+
+function renderCoverageRows() {
+  const el = document.getElementById('coverage-rows');
+  if (!el) return;
+  const statusLabel = { good: 'Good', partial: 'Partial', hidden: 'Hidden' };
+  el.innerHTML = phoneCoverage.map(c => {
+    const pct = Math.round((c.covered / c.total) * 100);
+    return `<div class="coverage-row">
+      <div class="coverage-supplier">${c.name}</div>
+      <div class="coverage-ratio">${c.covered} / ${c.total}</div>
+      <div class="coverage-line"><div class="coverage-line-fill ${c.status}" style="width: ${pct}%"></div></div>
+      <div class="coverage-tag ${c.status}">${statusLabel[c.status]}</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================
+// TASKS
+// ============================================
+function renderTasks() {
+  const list = document.getElementById('task-list');
+  const filtered = activeTeamFilter === 'all'
+    ? tasks
+    : tasks.filter(t => t.team === activeTeamFilter);
+
+  if (!filtered.length) {
+    list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-tertiary); font-size: 12px;">No tasks for this team.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(t => {
+    const realIndex = tasks.indexOf(t);
+    let urgencyClass = 'warning', urgencyLabel = 'Soon';
+    if (t.urgency === 'now') { urgencyClass = 'danger'; urgencyLabel = 'Now'; }
+    if (t.done) { urgencyClass = 'success'; urgencyLabel = 'Done'; }
+
+    return `<div class="task-item">
+      <button class="task-checkbox ${t.done ? 'done' : ''}" onclick="toggleTask(${realIndex})" aria-label="Toggle task">
+        ${t.done ? '✓' : ''}
+      </button>
+      <span class="task-text ${t.done ? 'done' : ''}">${t.text}</span>
+      <span class="task-team">${t.team}</span>
+      <span class="task-urgency"><span class="pill ${urgencyClass}">${urgencyLabel}</span></span>
+    </div>`;
+  }).join('');
+}
+
+function filterTeam(team, el) {
+  activeTeamFilter = team;
+  document.querySelectorAll('.team-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderTasks();
+}
+
+function toggleTask(index) {
+  const wasDone = tasks[index].done;
+  tasks[index].done = !wasDone;
+
+  if (!wasDone) {
+    atRiskCount = Math.max(0, atRiskCount - 2);
+  } else {
+    atRiskCount = Math.min(47, atRiskCount + 2);
+  }
+
+  const el = document.getElementById('at-risk-count');
+  if (el) el.textContent = atRiskCount;
+
+  renderTasks();
+}
+
+// ============================================
+// ACTION BUTTONS
+// ============================================
+function handleActionClick(button, type) {
+  if (type === 'dismiss') {
+    const alertItem = button.closest('.alert-item');
+    if (alertItem) {
+      alertItem.style.opacity = '0.4';
+      alertItem.querySelectorAll('button').forEach(b => b.disabled = true);
+    }
+    return;
+  }
+
+  button.textContent = 'Done ✓';
+  button.className = 'btn-done';
+  button.disabled = true;
+}
+
+// ============================================
+// REROUTE PANEL
+// ============================================
+let autoRerouteOn = false;
+let reroutePriority = 'time';
+
+const routeOptions = {
+  time:   { label: 'Option A: Fastest (NH37)',               key: 'fastest' },
+  cost:   { label: 'Option B: Cheapest (SH42)',              key: 'cheapest' },
+  carbon: { label: 'Option C: Low-emission (multimodal)',    key: 'lowemission' }
+};
+
+function toggleReroutePanel() {
+  const panel = document.getElementById('reroute-panel');
+  if (!panel) return;
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleAutoReroute() {
+  autoRerouteOn = !autoRerouteOn;
+  const toggle = document.getElementById('auto-reroute-toggle');
+  if (toggle) toggle.classList.toggle('on', autoRerouteOn);
+  updateAutoRerouteStatus();
+}
+
+function setReroutePriority(priority, el) {
+  reroutePriority = priority;
+  document.querySelectorAll('.priority-option').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  updateAutoRerouteStatus();
+}
+
+function updateAutoRerouteStatus() {
+  const status = document.getElementById('auto-reroute-status');
+  if (!status) return;
+
+  const selected = routeOptions[reroutePriority];
+  const onLabel = autoRerouteOn
+    ? '<strong style="color: var(--text-success);">on</strong>'
+    : '<strong>off</strong>';
+
+  const priorityLabel = {
+    time: 'minimize time',
+    cost: 'minimize cost',
+    carbon: 'minimize carbon'
+  }[reroutePriority];
+
+  const actionVerb = autoRerouteOn
+    ? 'system will auto-select'
+    : 'system would auto-select';
+
+  status.innerHTML = `Currently ${onLabel}. Priority set to <strong>${priorityLabel}</strong>. When enabled, ${actionVerb} <strong>${selected.label}</strong> for this disruption.`;
+}
+
+// ============================================
+// ROI CALCULATOR
+// ============================================
+function switchUseCase(key, el) {
+  currentUseCase = key;
+  document.querySelectorAll('.usecase-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+
+  const cfg = useCaseConfig[key];
+  document.getElementById('usecase-title').textContent = cfg.title;
+  document.getElementById('usecase-subtitle').textContent = cfg.subtitle;
+
+  document.getElementById('suppliers-slider').value = cfg.defaults.suppliers;
+  document.getElementById('cost-slider').value = cfg.defaults.cost;
+  document.getElementById('incidents-slider').value = cfg.defaults.incidents;
+  document.getElementById('detection-slider').value = cfg.defaults.detection;
+
+  updateROI();
+}
+
+function updateROI() {
+  const cfg = useCaseConfig[currentUseCase];
+  const suppliers = parseInt(document.getElementById('suppliers-slider').value);
+  const cost = parseInt(document.getElementById('cost-slider').value);
+  const incidents = parseInt(document.getElementById('incidents-slider').value);
+  const detection = parseInt(document.getElementById('detection-slider').value);
+
+  document.getElementById('suppliers-value').textContent = suppliers;
+  document.getElementById('cost-value').textContent = formatINR(cost).replace('₹ ', '');
+  document.getElementById('incidents-value').textContent = incidents;
+  document.getElementById('detection-value').textContent = detection + '%';
+
+  const totalCost = suppliers * cfg.kitCost;
+  const recurring = suppliers * cfg.annualPerSupplier;
+  const annualSavings = incidents * cost * (detection / 100);
+  const netYear1 = annualSavings - totalCost - recurring;
+  const paybackMonths = netYear1 > 0 ? (totalCost / (annualSavings / 12)) : 999;
+  const fiveYearNet = (annualSavings * 5) - totalCost - (recurring * 5);
+
+  document.getElementById('kit-cost').textContent = cfg.kitCost === 0 ? '₹ 0 (no hardware)' : formatINR(cfg.kitCost);
+  document.getElementById('total-cost').textContent = cfg.kitCost === 0 ? '₹ 0' : formatINR(totalCost);
+  document.getElementById('recurring-cost').textContent = formatINR(recurring) + '/yr';
+  document.getElementById('annual-savings').textContent = formatINR(annualSavings);
+  if (cfg.kitCost === 0) {
+    document.getElementById('payback').textContent = netYear1 > 0 ? 'Immediate' : 'n/a';
+  } else {
+    document.getElementById('payback').textContent = paybackMonths < 60 ? paybackMonths.toFixed(1) + ' months' : 'n/a';
+  }
+  document.getElementById('five-year').textContent = formatINR(fiveYearNet);
+
+  updateSavingsChart(totalCost, recurring, annualSavings);
+}
+
+function updateSavingsChart(totalCost, recurring, annualSavings) {
+  if (!savingsChartInstance) return;
+  const years = [1, 2, 3, 4, 5];
+  const cumulative = years.map(y => (annualSavings * y) - totalCost - (recurring * y));
+  savingsChartInstance.data.datasets[0].data = cumulative;
+  savingsChartInstance.update();
+}
+
+// ============================================
+// CHARTS
+// ============================================
+function setupChartDefaults() {
+  Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = '#88877f';
+}
+
+function initSupplierChart() {
+  const ctx = document.getElementById('riskSignalChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Delivery delays', 'Financial stress', 'News signals', 'Social signals'],
+      datasets: [{
+        data: [42, 28, 18, 12],
+        backgroundColor: ['#e24b4a', '#ef9f27', '#378add', '#888780'],
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.y + '%' } } },
+      scales: {
+        y: { beginAtZero: true, max: 60, ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: 'rgba(128,128,128,0.1)' } },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function initTrendsCharts() {
+  const trendsCtx = document.getElementById('trendsChart');
+  if (trendsCtx) {
+    new Chart(trendsCtx, {
+      type: 'line',
+      data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        datasets: [
+          { label: 'Detected', data: [12,18,9,22,15,8,14], borderColor: '#e24b4a', backgroundColor: 'rgba(226,75,74,0.15)', tension: 0.3, pointRadius: 3, fill: true },
+          { label: 'Resolved', data: [10,15,9,19,15,8,12], borderColor: '#1d9e75', backgroundColor: 'rgba(29,158,117,0.15)', tension: 0.3, pointRadius: 3, fill: true }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { font: { size: 11 } }, grid: { color: 'rgba(128,128,128,0.1)' } },
+          x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  const onTimeCtx = document.getElementById('onTimeChart');
+  if (onTimeCtx) {
+    new Chart(onTimeCtx, {
+      type: 'line',
+      data: {
+        labels: ['W1','W2','W3','W4','W5','W6','W7','W8'],
+        datasets: [{ label: 'On-time %', data: [74,76,78,79,82,83,85,87], borderColor: '#1d9e75', backgroundColor: 'rgba(29,158,117,0.15)', tension: 0.3, pointRadius: 3, fill: true }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.y + '%' } } },
+        scales: {
+          y: { min: 70, max: 95, ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: 'rgba(128,128,128,0.1)' } },
+          x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  const categoryCtx = document.getElementById('categoryChart');
+  if (categoryCtx) {
+    new Chart(categoryCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Weather','Traffic','Port congestion','Supplier risk','Other'],
+        datasets: [{ data: [34,26,18,14,8], backgroundColor: ['#378add','#ef9f27','#e24b4a','#888780','#b4b2a9'], borderRadius: 4, borderSkipped: false }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.x + '%' } } },
+        scales: {
+          x: { beginAtZero: true, max: 45, ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: 'rgba(128,128,128,0.1)' } },
+          y: { ticks: { font: { size: 11 } }, grid: { display: false } }
+        }
+      }
+    });
+  }
+}
+
+function initROIChart() {
+  const ctx = document.getElementById('savingsChart');
+  if (!ctx) return;
+  savingsChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+      datasets: [{
+        label: 'Cumulative net savings (₹)',
+        data: [0, 0, 0, 0, 0],
+        backgroundColor: ['#378add', '#4a94dd', '#5d9edd', '#70a8dd', '#1d9e75'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: c => formatINR(c.parsed.y) }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: v => {
+              if (Math.abs(v) >= 10000000) return '₹' + (v / 10000000).toFixed(1) + 'cr';
+              if (Math.abs(v) >= 100000)   return '₹' + (v / 100000).toFixed(0) + 'L';
+              return '₹' + v;
+            },
+            font: { size: 11 }
+          },
+          grid: { color: 'rgba(128,128,128,0.1)' }
+        },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+  updateROI();
+}
+
+// ============================================
+// CLOCK
+// ============================================
+function startClock() {
+  const el = document.getElementById('clock-display');
+  setInterval(() => {
+    clockSeconds++;
+    if (clockSeconds < 60) {
+      el.textContent = `Updated ${clockSeconds}s ago`;
+    } else {
+      const m = Math.floor(clockSeconds / 60);
+      el.textContent = `Updated ${m}m ago`;
+    }
+  }, 1000);
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  setupChartDefaults();
+  renderShipments(shipments);
+  renderSuppliers();
+  renderCoverageRows();
+  renderTasks();
+  updateRisk();
+  updateFleetDPS();
+  startClock();
+
+  // Initialize Gemini panel
+  initGeminiPanel();
+});
+
+// ============================================================
+// LIVE GEMINI CLASSIFICATION — calls backend /classify endpoint
+// ============================================================
+//
+// HOW THIS WORKS:
+//   1. On page load, fetches sample Indian headlines from /sample-feed
+//   2. User picks a headline from the dropdown
+//   3. User clicks "Classify with Gemini →"
+//   4. Frontend POSTs the headline to /classify
+//   5. Backend calls Google Gemini, returns structured JSON
+//   6. Frontend renders signal_type, severity, corridors, action
+//
+// AFTER DEPLOYMENT TO RENDER:
+//   Change BACKEND_URL below to your live Render URL
+//   (e.g., 'https://pathsetu-api.onrender.com')
+//
+// ============================================================
+
+const BACKEND_URL = 'http://localhost:8000';
+// const BACKEND_URL = 'https://pathsetu-api.onrender.com';  // ← uncomment for production
+
+let _classifyInFlight = false;
+
+async function initGeminiPanel() {
+  const statusEl = document.getElementById('gemini-status');
+  const selectEl = document.getElementById('gemini-headline-select');
+  const btnEl = document.getElementById('gemini-classify-btn');
+
+  // Try to load the sample feed from the backend
+  try {
+    const res = await fetch(`${BACKEND_URL}/sample-feed`, { method: 'GET' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // Populate dropdown
+    selectEl.innerHTML = '';
+    const headlines = data.headlines || [];
+    headlines.forEach((h, i) => {
+      const opt = document.createElement('option');
+      opt.value = h;
+      opt.textContent = h.length > 90 ? h.substring(0, 87) + '...' : h;
+      if (i === 0) opt.selected = true;
+      selectEl.appendChild(opt);
+    });
+
+    btnEl.disabled = false;
+    statusEl.textContent = `${headlines.length} real Indian supply chain headlines loaded. Pick one to classify.`;
+    statusEl.className = 'gemini-status success';
+  } catch (err) {
+    selectEl.innerHTML = '<option value="">Backend not reachable</option>';
+    btnEl.disabled = true;
+    statusEl.innerHTML = `Backend not reachable at <code>${BACKEND_URL}</code>. Start the backend (<code>python main.py</code>) or update BACKEND_URL in this file.`;
+    statusEl.className = 'gemini-status error';
+  }
+}
+
+async function classifyHeadline() {
+  if (_classifyInFlight) return;
+
+  const selectEl = document.getElementById('gemini-headline-select');
+  const btnEl = document.getElementById('gemini-classify-btn');
+  const btnLabel = document.getElementById('gemini-btn-label');
+  const statusEl = document.getElementById('gemini-status');
+  const resultContainer = document.getElementById('gemini-result-container');
+  const panelEl = document.getElementById('gemini-panel');
+
+  const headline = selectEl.value;
+  if (!headline) {
+    statusEl.textContent = 'Pick a headline first.';
+    statusEl.className = 'gemini-status error';
+    return;
+  }
+
+  // UI: loading state
+  _classifyInFlight = true;
+  btnEl.disabled = true;
+  btnLabel.innerHTML = '<span class="gemini-spinner"></span> Calling Gemini...';
+  statusEl.textContent = 'Sending headline to Google Gemini for classification...';
+  statusEl.className = 'gemini-status';
+  resultContainer.style.display = 'none';
+
+  const t0 = performance.now();
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/classify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ headline })
+    });
+    if (!res.ok) {
+      const errBody = await res.text();
+      throw new Error(`HTTP ${res.status}: ${errBody.substring(0, 120)}`);
+    }
+    const result = await res.json();
+    const elapsed = ((performance.now() - t0) / 1000).toFixed(1);
+
+    // Render the result
+    renderGeminiResult(result, elapsed);
+    resultContainer.style.display = 'block';
+    panelEl.classList.add('has-result');
+    statusEl.textContent = `Classified by Gemini in ${elapsed}s. Try another headline below.`;
+    statusEl.className = 'gemini-status success';
+  } catch (err) {
+    statusEl.textContent = `Error: ${err.message}`;
+    statusEl.className = 'gemini-status error';
+  } finally {
+    _classifyInFlight = false;
+    btnEl.disabled = false;
+    btnLabel.textContent = 'Classify with Gemini →';
+  }
+}
+
+function renderGeminiResult(result, elapsed) {
+  const container = document.getElementById('gemini-result-container');
+  const signalType = (result.signal_type || 'other').toLowerCase();
+  const severity = (result.severity || 'medium').toLowerCase();
+  const corridors = Array.isArray(result.affected_corridors) ? result.affected_corridors : [];
+  const confidence = typeof result.confidence === 'number' ? result.confidence : 0.7;
+  const confidencePct = Math.round(confidence * 100);
+
+  container.innerHTML = `
+    <div class="gemini-result">
+      <div class="gemini-result-header">
+        <span class="gemini-result-eyebrow">Gemini classification</span>
+        <span class="gemini-result-eyebrow" style="margin-left: auto;">${elapsed}s · ${confidencePct}% confidence</span>
+      </div>
+      <div class="gemini-result-headline">"${escapeHtml(result.headline || '')}"</div>
+
+      <div class="gemini-tags">
+        <span class="gemini-tag signal-${signalType}">
+          <span class="gemini-tag-label">Signal</span>
+          <strong>${escapeHtml(signalType)}</strong>
+        </span>
+        <span class="gemini-tag severity-${severity}">
+          <span class="gemini-tag-label">Severity</span>
+          <strong>${escapeHtml(severity)}</strong>
+        </span>
+      </div>
+
+      <div class="gemini-fields">
+        <div class="gemini-field">
+          <div class="gemini-field-label">Affected corridors</div>
+          <div class="gemini-field-value">${corridors.length ? corridors.map(c => escapeHtml(c)).join(' · ') : '—'}</div>
+        </div>
+        <div class="gemini-field">
+          <div class="gemini-field-label">Suggested action</div>
+          <div class="gemini-field-value action">${escapeHtml(result.suggested_action || '—')}</div>
+        </div>
+        <div class="gemini-field">
+          <div class="gemini-field-label">Reasoning</div>
+          <div class="gemini-field-value" style="color: var(--text-secondary); font-size: 11.5px;">${escapeHtml(result.reasoning || '—')}</div>
+        </div>
+        <div class="gemini-field">
+          <div class="gemini-field-label">Confidence</div>
+          <div class="gemini-field-value">
+            <span class="gemini-confidence-bar"><span class="gemini-confidence-fill" style="width: ${confidencePct}%"></span></span>
+            <strong>${confidencePct}%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+</script>
+</body>
+</html>
