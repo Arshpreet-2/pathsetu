@@ -8,7 +8,7 @@ Endpoints:
   POST /classify      — classify a single news headline using Gemini
   GET  /sample-feed   — pre-configured Indian supply chain news for demo
 
-Author:  Team PathSetu, B.Tech., Second Year,  IGDTUW-Delhi
+Author:  Team PathSetu, B.Tech., First Year,  IGDTUW-Delhi
 """
 
 import os
