@@ -3978,15 +3978,13 @@ document.addEventListener('DOMContentLoaded', () => {
 //   5. Backend calls Google Gemini, returns structured JSON
 //   6. Frontend renders signal_type, severity, corridors, action
 //
-// AFTER DEPLOYMENT TO RENDER:
-//   Change BACKEND_URL below to your live Render URL
-//   (e.g., 'https://pathsetu-api.onrender.com')
+
 //
 // ============================================================
-
-const BACKEND_URL = 'http://localhost:8000';
-// const BACKEND_URL = 'https://pathsetu-api.onrender.com';  // ← uncomment for production
-
+//For local system 
+//const BACKEND_URL = 'http://localhost:8000';
+// AFTER DEPLOYMENT TO RENDER:
+const BACKEND_URL = 'https://pathsetu.onrender.com';
 let _classifyInFlight = false;
 
 async function initGeminiPanel() {
