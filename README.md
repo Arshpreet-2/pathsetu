@@ -8,7 +8,7 @@ A Gemini-powered supply chain intelligence command center for Indian logistics. 
 
 ---
 
-## 🚀 Try the live demo (60 seconds)
+##  Try the live demo (60 seconds)
 
 1. Open: [https://pathsetu.vercel.app](https://pathsetu.vercel.app)
 2. Scroll to **Live Disruption Classification** panel in the Overview tab
@@ -21,13 +21,13 @@ A Gemini-powered supply chain intelligence command center for Indian logistics. 
 
 ---
 
-## 📺 Demo video
+##  Demo video
 
 [3-minute walkthrough on YouTube](https://youtu.be/your-video-id) *(unlisted)*
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌──────────────────────────────┐
@@ -56,7 +56,7 @@ A Gemini-powered supply chain intelligence command center for Indian logistics. 
 
 ---
 
-## 📁 Repository structure
+##  Repository structure
 
 ```
 pathsetu/
@@ -73,7 +73,7 @@ pathsetu/
 
 ---
 
-## 🛠️ Tech stack
+##  Tech stack
 
 - **Frontend:** HTML, CSS, vanilla JavaScript, Chart.js — deployed on Vercel
 - **Backend:** FastAPI · Python 3.11 · httpx · Pydantic — deployed on Render Free Tier
@@ -89,7 +89,7 @@ pathsetu/
 
 ---
 
-## 🚀 Run locally
+##  Run locally
 
 ### Prerequisites
 - Python 3.11 or newer
@@ -119,7 +119,7 @@ Just open `frontend/index.html` in your browser. The dashboard's `BACKEND_URL` c
 
 ---
 
-## 🎯 Problem we're solving
+##  Problem we're solving
 
 Indian supply chains lose thousands of crores annually to disruptions — storms, strikes, port congestion, accidents, supplier failures, and cold-chain breaches — but current systems detect these too late. Signals exist in weather APIs, road telemetry, port feeds, news, and IoT sensors, but they sit in silos. No platform fuses them into a single predictive score that planners can act on in real time.
 
@@ -127,7 +127,7 @@ Indian supply chains lose thousands of crores annually to disruptions — storms
 
 ---
 
-## ✨ Key features (11 differentiators)
+##  Key features (11 differentiators)
 
 1. **Disruption Probability Score (DPS)** — single 0-100 score per shipment
 2. **5-Category Signal Fusion** — weather + traffic + port + supplier + demand
@@ -143,7 +143,7 @@ Indian supply chains lose thousands of crores annually to disruptions — storms
 
 ---
 
-## 🌏 Built for India
+##  Built for India
 
 - **CSR-fundable** under Companies Act 2013, Schedule VII (ii)+(iii)+(ix)
 - **Vertical-agnostic** with three anchor-buyer use cases: cold chain (₹1,200/supplier), fragile goods (₹2,500), last-mile visibility (₹3,500)
@@ -151,13 +151,7 @@ Indian supply chains lose thousands of crores annually to disruptions — storms
 
 ---
 
-## 👥 Team
-
-**Sushil Singh** — Project Lead · Delhi NCR, India
-
----
-
-## 📄 License
+##  License
 
 This project is built for Google Solution Challenge 2026. All code is open source for educational and demonstration purposes.
 
