@@ -154,12 +154,3 @@ Indian supply chains lose thousands of crores annually to disruptions — storms
 ##  License
 
 This project is built for Google Solution Challenge 2026. All code is open source for educational and demonstration purposes.
-
----
-
-## 🙏 Acknowledgments
-
-- Google Solution Challenge organizers
-- Hack2Skill (challenge platform)
-- Google Gemini API team
-- Indian supply chain professionals whose insights shaped this product
